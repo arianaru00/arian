@@ -6,7 +6,7 @@
   <title>Arian Martinez · Editor de video y operador de streaming en Buenos Aires</title>
   <meta name="description" content="Arian Martinez, editor de video y operador de streaming en vivo en Buenos Aires. Edición de reels, cine y videoclips, operación de OBS, switcheo de cámaras y audio en vivo.">
   <meta name="author" content="Arian Martinez">
-  <meta name="theme-color" content="#0d0e10">
+  <meta name="theme-color" content="#f6f5f0">
 
   <!-- Open Graph (WhatsApp, LinkedIn, Facebook) -->
   <meta property="og:type" content="website">
@@ -20,11 +20,11 @@
   <meta property="og:image:alt" content="Arian Martinez, editor de video y operador de streaming en vivo">
   <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d0e10'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23ff5a3c'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%2316161a'/%3E%3Crect x='7' y='7' width='18' height='18' fill='%2334c3ee'/%3E%3Cpath d='M13 11v10l8-5z' fill='%2316161a'/%3E%3C/svg%3E">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Caveat:wght@600&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -33,63 +33,103 @@
   <header class="nav" id="nav">
     <div class="nav__inner">
       <a class="nav__brand" href="#inicio" aria-label="Arian Martinez, volver al inicio">
-        <span class="rec-dot" aria-hidden="true"></span>Arian Martinez
+        <svg class="nav__logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect width="32" height="32" rx="4"/><rect x="7" y="7" width="18" height="18" class="nav__logo-in"/><path d="M13 11v10l8-5z"/></svg>
+        <span>Arian</span>
       </a>
       <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">
-        <span class="sr-only">Abrir menú</span>
+        <span class="nav__toggle-label">Menú</span>
         <span class="nav__burger" aria-hidden="true"></span>
+        <span class="sr-only" id="navToggleSr">Abrir menú</span>
       </button>
       <nav class="nav__menu" id="navMenu" aria-label="Secciones">
         <ul>
+          <li><a href="#sobre-mi">Sobre mí</a></li>
           <li><a href="#edicion">Edición</a></li>
-          <li><a href="#streaming">Streaming</a></li>
+          <li><a href="#streaming">En vivo</a></li>
           <li><a href="#redes">Redes</a></li>
           <li><a href="#produccion">Producción</a></li>
-          <li><a href="#herramientas">Herramientas</a></li>
           <li><a href="#contacto" class="nav__cta">Contacto</a></li>
         </ul>
       </nav>
     </div>
-    <div class="playhead" aria-hidden="true"><span id="playhead"></span></div>
+    <div class="ruler" aria-hidden="true">
+      <div class="ruler__labels" data-ruler></div>
+      <span class="ruler__head" id="playhead"></span>
+    </div>
   </header>
 
   <main id="contenido">
     <!-- ============================================================ HERO -->
     <section class="hero" id="inicio" aria-labelledby="hero-title">
       <div class="wrap">
-        <p class="hero__kicker mono"><span class="rec-dot" aria-hidden="true"></span>REC · Buenos Aires, Argentina</p>
-        <h1 class="hero__title" id="hero-title">Arian<br>Martinez</h1>
+        <p class="hero__tc mono" aria-hidden="true">TC <span id="tc">00:00:00:00</span></p>
+
+        <div class="stage">
+          <p class="sticker sticker--mint stage__a">Editando para Eternos</p>
+          <p class="sticker sticker--butter stage__b">Antes en La Cápsula Producciones</p>
+          <p class="hand stage__hand" aria-hidden="true">mi nombre es</p>
+
+          <div class="selbox">
+            <h1 class="hero__title" id="hero-title">Arian Martinez</h1>
+            <span class="h h--tl" aria-hidden="true"></span><span class="h h--tr" aria-hidden="true"></span>
+            <span class="h h--bl" aria-hidden="true"></span><span class="h h--br" aria-hidden="true"></span>
+          </div>
+
+          <p class="sticker sticker--magenta stage__c">Buenos Aires, AR</p>
+          <p class="cursor cursor--yellow stage__d"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M1 1l5 14 2-6 6-2z"/></svg><span>Editor de video</span></p>
+          <p class="cursor cursor--cyan stage__e"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M1 1l5 14 2-6 6-2z"/></svg><span>Streaming en vivo</span></p>
+        </div>
+
+        <p class="hero__status mono"><span class="dot" aria-hidden="true"></span>Disponible para proyectos</p>
         <p class="hero__role">Editor de video y operador de streaming en vivo</p>
+
         <div class="hero__actions">
-          <a class="btn btn--accent" href="#edicion">Ver trabajos</a>
+          <a class="btn btn--ink" href="#edicion"><span class="btn__ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 6l6 6-6 6M12 6l6 6-6 6"/></svg></span>Ver trabajos</a>
           <a class="btn btn--ghost" href="#contacto">Contacto</a>
         </div>
 
-        <div class="showreel" id="showreel">
-          <!-- Se completa desde data/trabajos.js → showreel -->
-        </div>
-
-        <div class="about">
-          <h2 class="about__label mono">Sobre mí</h2>
-          <p id="sobreMi"></p>
-        </div>
+        <div class="showreel" id="showreel"></div>
       </div>
+      <svg class="arc" viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 88 Q600 -40 1200 88"/></svg>
     </section>
 
-    <!-- ========================================================= NÚMEROS -->
-    <section class="stats" aria-label="Números destacados">
+    <!-- ======================================================== SOBRE MÍ -->
+    <section class="section about" id="sobre-mi" aria-labelledby="about-title">
       <div class="wrap">
-        <ul class="stats__list" id="numeros"></ul>
+        <p class="hand about__hand" aria-hidden="true">sobre mí!</p>
+        <h2 class="tagbox" id="about-title">¿Qué onda?<span class="h h--tl" aria-hidden="true"></span><span class="h h--tr" aria-hidden="true"></span><span class="h h--bl" aria-hidden="true"></span><span class="h h--br" aria-hidden="true"></span></h2>
+
+        <div class="polaroids">
+          <figure class="polaroid polaroid--a">
+            <div class="polaroid__img"><span class="mono">ARIAN.JPG</span><img src="assets/fotos/arian.jpg" alt="Arian Martinez" loading="lazy" width="600" height="600" onerror="this.remove()"></div>
+            <figcaption class="hand">2026</figcaption>
+          </figure>
+          <figure class="polaroid polaroid--b">
+            <div class="polaroid__img"><span class="mono">SETUP.JPG</span><img src="assets/fotos/setup.jpg" alt="Mi puesto de edición y streaming" loading="lazy" width="600" height="600" onerror="this.remove()"></div>
+            <figcaption class="hand">mi setup</figcaption>
+          </figure>
+        </div>
+
+        <p class="about__text" id="sobreMi"></p>
+
+        <ul class="skills" aria-label="Qué hago">
+          <li class="skill skill--yellow"><span class="skill__ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.5 7.5L20 18M8.5 16.5L20 6"/></svg></span>Edición de video</li>
+          <li class="skill skill--green"><span class="skill__ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/></svg></span>Streaming en vivo</li>
+          <li class="skill skill--magenta"><span class="skill__ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 5h16v11H9l-5 4z"/></svg></span>Community management</li>
+          <li class="skill skill--cyan"><span class="skill__ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3 10h18v10H3zM3 10l3-6 4 1-3 5M10 5l4 1-3 4M14 6l4 1-3 3"/></svg></span>Producción</li>
+        </ul>
+
+        <ul class="stats" id="numeros" aria-label="Números destacados"></ul>
       </div>
     </section>
 
     <!-- ========================================================= EDICIÓN -->
-    <section class="section section--main" id="edicion" aria-labelledby="edicion-title">
+    <section class="section" id="edicion" aria-labelledby="edicion-title">
       <div class="wrap">
         <header class="section__head">
-          <p class="section__tc mono">01 · TC 00:01:00:00</p>
-          <h2 class="section__title" id="edicion-title">Edición</h2>
-          <p class="section__lead">Piezas verticales para redes, cine, videoclip e institucional. Corte, ritmo, color y sonido.</p>
+          <p class="hand" aria-hidden="true">mirá mi trabajo!</p>
+          <h2 class="pixel-title" id="edicion-title">Edición</h2>
+          <p class="note">Reels para redes, cine, videoclip e institucional. Corte, ritmo, color y sonido.</p>
         </header>
         <div class="filters" role="group" aria-label="Filtrar trabajos de edición" id="edicionFiltros"></div>
         <div id="edicionGrupos" aria-live="polite"></div>
@@ -100,12 +140,18 @@
     <section class="section" id="streaming" aria-labelledby="streaming-title">
       <div class="wrap">
         <header class="section__head">
-          <p class="section__tc mono">02 · <span class="live">EN VIVO</span></p>
-          <h2 class="section__title" id="streaming-title">Streaming en vivo</h2>
-          <p class="section__lead" id="streamingIntro"></p>
-          <ul class="chips" id="streamingTareas" aria-label="Rol técnico"></ul>
+          <p class="sticker sticker--live"><span class="dot dot--live" aria-hidden="true"></span>On air</p>
+          <h2 class="pixel-title" id="streaming-title">En vivo</h2>
+          <p class="note" id="streamingIntro"></p>
         </header>
-        <div class="grid" id="streamingGrid"></div>
+        <div class="panel panel--ink">
+          <p class="panel__tab mono">Transmisiones</p>
+          <div class="panel__head">
+            <p class="mono">Mi rol técnico</p>
+            <ul class="tags" id="streamingTareas" aria-label="Rol técnico"></ul>
+          </div>
+          <div class="grid" id="streamingGrid"></div>
+        </div>
       </div>
     </section>
 
@@ -113,11 +159,11 @@
     <section class="section" id="redes" aria-labelledby="redes-title">
       <div class="wrap">
         <header class="section__head">
-          <p class="section__tc mono">03 · TC 00:03:00:00</p>
-          <h2 class="section__title" id="redes-title">Redes y community management</h2>
-          <p class="section__lead">Cuentas que edito, alimento y gestiono.</p>
+          <p class="hand" aria-hidden="true">cuentas que manejo</p>
+          <h2 class="pixel-title" id="redes-title">Redes</h2>
+          <p class="note">Community management: edición, contenido y gestión de cada cuenta.</p>
         </header>
-        <div class="grid" id="redesGrid"></div>
+        <div class="grid grid--accounts" id="redesGrid"></div>
       </div>
     </section>
 
@@ -125,11 +171,14 @@
     <section class="section" id="produccion" aria-labelledby="produccion-title">
       <div class="wrap">
         <header class="section__head">
-          <p class="section__tc mono">04 · TC 00:04:00:00</p>
-          <h2 class="section__title" id="produccion-title">Producción</h2>
-          <p class="section__lead">Proyectos donde coordiné equipo, tiempos y recursos.</p>
+          <p class="hand" aria-hidden="true">detrás de cámara</p>
+          <h2 class="pixel-title" id="produccion-title">Producción</h2>
+          <p class="note">Proyectos donde coordiné equipo, tiempos y recursos.</p>
         </header>
-        <div class="grid" id="produccionGrid"></div>
+        <div class="panel panel--green">
+          <p class="panel__tab mono">Producción</p>
+          <div class="grid" id="produccionGrid"></div>
+        </div>
       </div>
     </section>
 
@@ -137,29 +186,54 @@
     <section class="section section--tight" id="herramientas" aria-labelledby="herramientas-title">
       <div class="wrap">
         <header class="section__head">
-          <p class="section__tc mono">05 · TC 00:05:00:00</p>
-          <h2 class="section__title" id="herramientas-title">Herramientas</h2>
+          <h2 class="pixel-title pixel-title--sm" id="herramientas-title">Herramientas</h2>
         </header>
         <ul class="tools" id="herramientasLista"></ul>
       </div>
     </section>
 
     <!-- ======================================================== CONTACTO -->
-    <section class="section contact" id="contacto" aria-labelledby="contacto-title">
+    <section class="section talk" id="contacto" aria-labelledby="contacto-title">
       <div class="wrap">
-        <header class="section__head">
-          <p class="section__tc mono">06 · FIN DE CINTA</p>
-          <h2 class="section__title" id="contacto-title">Hablemos</h2>
-          <p class="section__lead">Busco proyectos de edición y operación en vivo. Respondo rápido.</p>
-        </header>
-        <ul class="contact__list" id="contactoLista"></ul>
-        <a class="btn btn--accent btn--lg" id="cvLink" href="assets/cv-arian-martinez.pdf" download>Descargar CV (PDF)</a>
+        <div class="talk__intro">
+          <svg class="blob" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+            <path d="M100 38c22-34 74-20 70 22 38 6 40 58 6 72 18 34-26 64-58 42-26 30-78 12-70-30-38-10-36-62 4-70-6-38 40-56 48-36z"/>
+            <rect x="78" y="80" width="12" height="28" rx="6" class="blob__eye"/><rect x="108" y="80" width="12" height="28" rx="6" class="blob__eye"/>
+          </svg>
+          <div>
+            <h2 class="pixel-title" id="contacto-title">Hablemos</h2>
+            <p class="talk__lead">Busco proyectos de edición y operación en vivo: reels, piezas largas, transmisiones multicámara. Respondo rápido.</p>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="comment">
+            <p class="comment__label mono">Comentario</p>
+            <div class="comment__row">
+              <span class="avatar avatar--cyan" aria-hidden="true">A</span>
+              <div>
+                <p class="comment__name">Arian Martinez</p>
+                <p class="comment__text">Abierto a trabajos freelance, full-time y colaboraciones con productoras, medios y centros culturales.</p>
+              </div>
+            </div>
+          </div>
+          <a class="bigbtn" id="contactBtn" href="#contacto">
+            <span class="bigbtn__ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 6l6 6-6 6M12 6l6 6-6 6"/></svg></span>
+            <span class="bigbtn__label">Contacto</span>
+            <span class="bigbtn__ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 6l6 6-6 6M12 6l6 6-6 6"/></svg></span>
+          </a>
+          <div class="contact-sheet">
+            <ul class="contact__list" id="contactoLista"></ul>
+            <a class="btn btn--ink" id="cvLink" href="assets/cv-arian-martinez.pdf" download>Descargar CV (PDF)</a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="wrap mono">© <span id="year">2026</span> Arian Martinez · Buenos Aires</div>
+    <div class="ruler ruler--static" aria-hidden="true"><div class="ruler__labels" data-ruler></div></div>
+    <div class="wrap mono footer__line">© <span id="year">2026</span> Arian Martinez · Buenos Aires · Fin de cinta</div>
   </footer>
 
   <noscript><p class="noscript">Este sitio necesita JavaScript para mostrar los trabajos.</p></noscript>

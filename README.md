@@ -2,6 +2,8 @@
 
 Sitio de una sola página: HTML, CSS y JS puros, sin build. Se sube tal cual a GitHub Pages o Netlify.
 
+**Diseño:** las reglas visuales (colores, tipografías, componentes, qué no hacer) están en [`DESIGN.md`](DESIGN.md).
+
 ```
 index.html            estructura, SEO y Open Graph
 css/styles.css        estilos (mobile-first, tema oscuro)
