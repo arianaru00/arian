@@ -11,9 +11,23 @@ assets/og-image.jpg   imagen que se ve al compartir el link (1200×630)
 assets/thumbs/        portadas de los reels de Instagram (las agregás vos)
 ```
 
-## Editar contenido
+## Editar contenido (Sanity)
 
-Todo se cambia en `data/trabajos.js`. Para agregar una pieza, copiá un bloque `{ ... }` y cambiá los datos.
+El contenido se edita en el Studio: **https://arian-portfolio.sanity.studio/** (proyecto Sanity "Arian", `jdyfiba6`, dataset `production`).
+
+- **Proyecto**: cada pieza. Elegí la *Sección* (Edición / Streaming / Producción) y, si es Edición, la *Categoría*. Pegá el link, completá rol, formato, reproducciones y descripción. En Instagram subí la portada vertical.
+- **Categoría de edición**: las pestañas de la sección Edición. Podés crear nuevas; el campo *Orden* define la posición.
+- **Cuenta de redes**: tarjetas de community management. Las cuentas opcionales (@lacosa_, @viajerafeminista, @arianfazzari) están como borrador: publicalas para que aparezcan.
+- **Ajustes del sitio**: sobre mí, showreel, números, herramientas, contacto y CV en PDF (uno solo).
+
+El sitio muestra solo lo **publicado** (botón *Publish*). Los cambios aparecen en el sitio en menos de un minuto, sin volver a subir archivos.
+
+La conexión está en `js/sanity.js`. Si Sanity no responde, el sitio usa `data/trabajos.js` como respaldo.
+Si publicás el sitio en otro dominio, agregalo en https://www.sanity.io/manage/project/jdyfiba6/api → *CORS origins* (sin "Allow credentials"). Ya están cargados `https://arianaru00.github.io` y `http://localhost:8080`.
+
+## Respaldo local
+
+`data/trabajos.js` tiene el mismo contenido inicial. Para agregar una pieza, copiá un bloque `{ ... }` y cambiá los datos.
 Los links de YouTube se pegan tal cual: el sitio limpia `&list=`, `&pp=`, `&start_radio=` y respeta `t=`.
 Las piezas con `url: ""` no se muestran.
 

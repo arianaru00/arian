@@ -1,4 +1,8 @@
 /* =========================================================================
+   RESPALDO LOCAL — el contenido principal ahora vive en Sanity:
+   https://arian-portfolio.sanity.studio/
+   Este archivo solo se usa si Sanity no responde (o para campos vacíos allá).
+   -------------------------------------------------------------------------
    CONTENIDO DEL PORTFOLIO — Arian Martinez
    -------------------------------------------------------------------------
    Todo lo que se ve en la página sale de este archivo.

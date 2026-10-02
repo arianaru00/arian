@@ -1,8 +1,9 @@
-/* Portfolio Arian Martinez — render del contenido de data/trabajos.js */
+/* Portfolio Arian Martinez — render del contenido.
+   Fuente: Sanity (js/sanity.js). Si Sanity no responde, usa data/trabajos.js. */
 (function () {
   "use strict";
 
-  var D = window.PORTFOLIO;
+  function render(D) {
   if (!D) return;
 
   var $ = function (sel) { return document.querySelector(sel); };
@@ -280,6 +281,17 @@
     if (o && typeof o === "object") Object.keys(o).forEach(function (k) { walk(o[k], path ? path + "." + k : k); });
   })(D, "");
   if (todos.length && console && console.info) {
-    console.info("[portfolio] Quedan " + todos.length + " campos con TODO en data/trabajos.js:\n- " + todos.join("\n- "));
+    console.info("[portfolio] Quedan " + todos.length + " campos con TODO (fuente: " + (D._fuente || "data/trabajos.js") + "):\n- " + todos.join("\n- "));
+  }
+  }
+
+  var local = window.PORTFOLIO;
+  if (window.cargarDesdeSanity) {
+    window.cargarDesdeSanity(local).then(render, function (err) {
+      if (console && console.warn) console.warn("[portfolio] Sanity no respondió, uso data/trabajos.js.", err);
+      render(local);
+    });
+  } else {
+    render(local);
   }
 })();
