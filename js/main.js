@@ -96,16 +96,26 @@
     return '<span class="metric"><strong>' + esc(metrica) + '</strong><span class="metric__label"> reproducciones</span></span>';
   }
 
-  function instagramMedia(p) {
-    // Si la portada no existe, el onerror deja ver el placeholder.
+  var PLATAFORMAS = {
+    instagram: { nombre: "Instagram", clip: "REEL_" },
+    tiktok: { nombre: "TikTok", clip: "TIKTOK_" },
+    link: { nombre: "el sitio", clip: "LINK_" },
+    youtube: { nombre: "YouTube", clip: "CLIP_" },
+  };
+
+  // Portada + link externo (Instagram, TikTok u otro). Si la portada no existe, se ve el placeholder.
+  function coverMedia(p) {
+    var plat = PLATAFORMAS[p.plataforma] || PLATAFORMAS.link;
+    var vertical = p.formato === "vertical";
     return (
       '<a class="reel" href="' + esc(p.url) + '" target="_blank" rel="noopener" aria-label="Ver ' +
-        esc(p.titulo) + ' en Instagram (se abre en una pestaña nueva)">' +
-        '<span class="reel__ph" aria-hidden="true"><span class="mono">9:16</span><span>' + esc(p.cliente) + "</span></span>" +
+        esc(p.titulo) + " en " + plat.nombre + ' (se abre en una pestaña nueva)">' +
+        '<span class="reel__ph" aria-hidden="true"><span class="mono">' + (vertical ? "9:16" : "16:9") + "</span><span>" + esc(p.cliente) + "</span></span>" +
         (p.portada
-          ? '<img src="' + esc(p.portada) + '" alt="Portada del reel ' + esc(p.titulo) + '" loading="lazy" decoding="async" width="720" height="1280" onerror="this.remove()">'
+          ? '<img src="' + esc(p.portada) + '" alt="Portada de ' + esc(p.titulo) + '" loading="lazy" decoding="async" width="' +
+            (vertical ? "720\" height=\"1280" : "1280\" height=\"720") + '" onerror="this.remove()">'
           : "") +
-        '<span class="reel__cta mono">Ver en Instagram <span aria-hidden="true">↗</span></span>' +
+        '<span class="reel__cta mono">Ver en ' + plat.nombre + ' <span aria-hidden="true">↗</span></span>' +
       "</a>"
     );
   }
@@ -114,8 +124,8 @@
     var h = "h" + (lvl || 3);
     var vertical = p.formato === "vertical";
     var media, extLink = "";
-    if (p.plataforma === "instagram") {
-      media = instagramMedia(p);
+    if (p.plataforma && p.plataforma !== "youtube") {
+      media = coverMedia(p);
     } else {
       var yt = parseYouTube(p.url);
       if (!yt) return "";
@@ -123,7 +133,7 @@
       extLink = '<a class="card__ext mono" href="' + ytWatchUrl(yt) + '" target="_blank" rel="noopener">Ver en YouTube<span class="sr-only"> (pestaña nueva)</span> <span aria-hidden="true">↗</span></a>';
     }
     clipCount++;
-    var clip = (p.plataforma === "instagram" ? "REEL_" : "CLIP_") + pad(clipCount) + ".MP4";
+    var clip = (PLATAFORMAS[p.plataforma] || PLATAFORMAS.youtube).clip + pad(clipCount) + (p.plataforma === "link" ? "" : ".MP4");
     return (
       '<article class="card ' + (vertical ? "card--v" : "card--h") + '">' +
         '<div class="card__media">' + media +
@@ -183,6 +193,35 @@
     el.innerHTML = piezas.map(function (p) { return workCard(p); }).join("");
   }
 
+  var EMPTY_CARD =
+    '<div class="card card--empty"><span class="mono">Carpeta en preparación</span>' +
+    '<p>Muy pronto, material nuevo acá.</p></div>';
+
+  // Arma una pila de carpetas en `sel` y su barra de marcadores en `navSel`.
+  // `offset` corre el ciclo de colores para que cada lado de la cámara arranque distinto.
+  function renderStack(sel, navSel, grupos, offset) {
+    var n1 = Math.max(grupos.length - 1, 1);
+    $(sel).innerHTML = grupos.map(function (g, i) {
+      var piezas = visible(g.piezas);
+      var anchor = "carpeta-" + slug(g.id);
+      var count = piezas.length ? piezas.length + (piezas.length === 1 ? " pieza" : " piezas") : "Próximamente";
+      return (
+        '<div class="group__gap" id="' + anchor + '"></div>' +
+        '<div class="group panel panel--' + PANEL_COLORS[(i + offset) % PANEL_COLORS.length] + '" data-group="' + esc(g.id) +
+          '" style="--i:' + i + ";--n1:" + n1 + '">' +
+          '<a class="panel__tab mono" href="#' + anchor + '" data-jump><span class="panel__tab-n">' + pad(i + 1) + "</span>" +
+            '<span class="panel__tab-name">' + esc(g.titulo) + "</span></a>" +
+          panelHead(count, '<h3 class="panel__title">' + esc(g.titulo) + "</h3>") +
+          (piezas.length ? track(piezas, 4) : '<div class="track track--solo">' + EMPTY_CARD + "</div>") +
+        "</div>"
+      );
+    }).join("");
+    $(navSel).innerHTML = grupos.map(function (g, i) {
+      return '<a class="filter" href="#carpeta-' + slug(g.id) + '" data-jump data-i="' + i + '">' +
+        '<span class="filter__n">' + pad(i + 1) + "</span>" + esc(g.titulo) + "</a>";
+    }).join("");
+  }
+
   /* ---------------------------------------------------------- Render */
   function render(D) {
     if (!D) return;
@@ -208,29 +247,14 @@
         '</span><span class="stat__text">' + esc(n.texto) + "</span></li>";
     }).join("");
 
-    // Edición: una carpeta de color por categoría, apiladas como en un archivero
-    var grupos = (D.edicion || []).filter(function (g) { return visible(g.piezas).length; });
-    var n1 = Math.max(grupos.length - 1, 1);
+    // Edición (detrás de cámara): carpetas apiladas; se ocultan las vacías
+    renderStack("#edicionGrupos", "#edicionFiltros",
+      (D.edicion || []).filter(function (g) { return visible(g.piezas).length; }), 0);
 
-    $("#edicionGrupos").innerHTML = grupos.map(function (g, i) {
-      var piezas = visible(g.piezas);
-      var anchor = "carpeta-" + slug(g.id);
-      return (
-        '<div class="group__gap" id="' + anchor + '"></div>' +
-        '<div class="group panel panel--' + PANEL_COLORS[i % PANEL_COLORS.length] + '" data-group="' + esc(g.id) +
-          '" style="--i:' + i + ";--n1:" + n1 + '">' +
-          '<a class="panel__tab mono" href="#' + anchor + '" data-jump><span class="panel__tab-n">' + pad(i + 1) + "</span>" +
-            '<span class="panel__tab-name">' + esc(g.titulo) + "</span></a>" +
-          panelHead(piezas.length + (piezas.length === 1 ? " pieza" : " piezas"), '<h3 class="panel__title">' + esc(g.titulo) + "</h3>") +
-          track(piezas, 4) +
-        "</div>"
-      );
-    }).join("");
-
-    $("#edicionFiltros").innerHTML = grupos.map(function (g, i) {
-      return '<a class="filter" href="#carpeta-' + slug(g.id) + '" data-jump data-i="' + i + '">' +
-        '<span class="filter__n">' + pad(i + 1) + "</span>" + esc(g.titulo) + "</a>";
-    }).join("");
+    // Delante de cámara: mismas carpetas; las vacías quedan "en preparación"
+    var dl = D.delante || {};
+    $("#delanteIntro").textContent = dl.intro || "";
+    renderStack("#delanteGrupos", "#delanteFiltros", dl.categorias || [], 3);
 
     // Streaming
     var st = D.streaming || {};
@@ -290,6 +314,7 @@
 
     setupTracks();
     setupStack();
+    sideFromHash();
 
     // Aviso TODO (solo consola)
     var todos = [];
@@ -329,39 +354,46 @@
   // y deja a la vista su pestaña. Si una carpeta no entra en pantalla, scrollea
   // entera antes de frenar (top negativo) para no esconder contenido.
   var STACK_STEP = 12;
-  var stack = [];
+  var stacks = []; // [{ groups: [...], nav: elemento de marcadores }]
 
   function layoutStack() {
-    var nav = $("#nav"), base = nav.offsetHeight + 44;
-    stack.forEach(function (g, i) {
-      var want = base + i * STACK_STEP, h = g.offsetHeight;
-      g._top = h > innerHeight - want - 16 ? Math.round(innerHeight - h - 16) : want;
-      g.style.top = g._top + "px";
+    var base = $("#nav").offsetHeight + 44;
+    stacks.forEach(function (st) {
+      st.groups.forEach(function (g, i) {
+        var want = base + i * STACK_STEP, h = g.offsetHeight;
+        if (!h) return; // pila oculta (el otro lado de la cámara)
+        g._top = h > innerHeight - want - 16 ? Math.round(innerHeight - h - 16) : want;
+        g.style.top = g._top + "px";
+      });
     });
     updateStack();
   }
 
   function updateStack() {
-    if (!stack.length) return;
-    var front = 0;
-    stack.forEach(function (g, i) {
-      var r = g.getBoundingClientRect();
-      if (r.top <= g._top + 2) front = i;
-      var next = stack[i + 1], cover = 0;
-      if (next && !reduceMotion) {
-        var dist = next.getBoundingClientRect().top - next._top;
-        cover = Math.max(0, Math.min(1, 1 - dist / (innerHeight * 0.6)));
-      }
-      g.style.setProperty("--cover", cover.toFixed(3));
-    });
-    stack.forEach(function (g, i) { g.classList.toggle("is-front", i === front); });
-    document.querySelectorAll("#edicionFiltros .filter").forEach(function (a) {
-      if (+a.dataset.i === front) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+    stacks.forEach(function (st) {
+      var groups = st.groups;
+      if (!groups.length || !groups[0].offsetHeight) return;
+      var front = 0;
+      groups.forEach(function (g, i) {
+        if (g.getBoundingClientRect().top <= g._top + 2) front = i;
+        var next = groups[i + 1], cover = 0;
+        if (next && !reduceMotion) {
+          var dist = next.getBoundingClientRect().top - next._top;
+          cover = Math.max(0, Math.min(1, 1 - dist / (innerHeight * 0.6)));
+        }
+        g.style.setProperty("--cover", cover.toFixed(3));
+      });
+      groups.forEach(function (g, i) { g.classList.toggle("is-front", i === front); });
+      st.nav.querySelectorAll(".filter").forEach(function (a) {
+        if (+a.dataset.i === front) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+      });
     });
   }
 
   function setupStack() {
-    stack = [].slice.call(document.querySelectorAll("#edicionGrupos .group"));
+    stacks = [].map.call(document.querySelectorAll(".stack"), function (el) {
+      return { groups: [].slice.call(el.querySelectorAll(":scope > .group")), nav: el.parentElement.querySelector(".filters") };
+    });
     layoutStack();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutStack);
   }
@@ -387,6 +419,75 @@
     var first = g.querySelector(".lite, .reel, a, button");
     if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, reduceMotion ? 0 : 450);
   });
+
+  /* ------------------------------------------------ Lado de la cámara */
+  // Dos paneles: "detrás" (edición, vivo, producción…) y "delante" (contenido, actuación, arte).
+  // El link #delante abre directamente ese lado.
+  var sideTabs = { detras: $("#tab-detras"), delante: $("#tab-delante") };
+  var STATUS = { detras: "Edit · lo que hago detrás de cámara", delante: "Rec · lo que hago delante de cámara" };
+
+  function currentSide() { return $("#delante").hidden ? "detras" : "delante"; }
+
+  function setSide(side, opts) {
+    opts = opts || {};
+    if (!sideTabs[side]) return;
+    Object.keys(sideTabs).forEach(function (k) {
+      var on = k === side;
+      sideTabs[k].setAttribute("aria-selected", on);
+      sideTabs[k].tabIndex = on ? 0 : -1;
+      document.getElementById(k).hidden = !on;
+    });
+    $(".side-switch").setAttribute("data-active", side);
+    document.body.classList.toggle("is-delante", side === "delante");
+    $("#ladoStatus").textContent = STATUS[side];
+    if (opts.focus) sideTabs[side].focus();
+    if (opts.scroll) {
+      var sw = $(".lado");
+      scrollTo({ top: sw.getBoundingClientRect().top + scrollY - $("#nav").offsetHeight - 8, behavior: reduceMotion ? "auto" : "smooth" });
+    }
+    if (opts.hash !== false && history.replaceState) history.replaceState(null, "", "#" + side);
+    layoutStack();
+    dispatchEvent(new Event("resize")); // recalcula flechas de las tiras del panel que apareció
+  }
+
+  Object.keys(sideTabs).forEach(function (k) {
+    sideTabs[k].addEventListener("click", function () { setSide(k); });
+  });
+  // Flechas del teclado entre las dos pestañas (patrón tablist)
+  $(".side-switch").addEventListener("keydown", function (ev) {
+    if (["ArrowLeft", "ArrowRight", "Home", "End"].indexOf(ev.key) < 0) return;
+    ev.preventDefault();
+    var next = ev.key === "Home" ? "detras" : ev.key === "End" ? "delante" : currentSide() === "detras" ? "delante" : "detras";
+    setSide(next, { focus: true });
+  });
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-side-go]");
+    if (b) setSide(b.dataset.sideGo, { scroll: true });
+  });
+
+  // Cualquier link interno que apunte al otro lado, primero cambia de lado
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest('a[href^="#"]');
+    if (!a || a.hasAttribute("data-jump")) return;
+    var id = a.getAttribute("href").slice(1);
+    if (id === "detras" || id === "delante") {
+      ev.preventDefault();
+      setSide(id, { scroll: true });
+      return;
+    }
+    var target = id && document.getElementById(id);
+    var panel = target && target.closest(".side");
+    if (panel && panel.hidden) setSide(panel.id, { hash: false });
+  }, true);
+
+  function sideFromHash() {
+    var id = location.hash.slice(1);
+    if (!id) return;
+    var el = document.getElementById(id);
+    var panel = el && (el.classList.contains("side") ? el : el.closest(".side"));
+    if (panel) setSide(panel.id, { hash: false, scroll: id === "detras" || id === "delante" });
+  }
+  addEventListener("hashchange", sideFromHash);
 
   /* ------------------------------------------------------- Navegación */
   var toggle = $("#navToggle"), menu = $("#navMenu");

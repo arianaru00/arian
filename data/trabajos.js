@@ -316,6 +316,28 @@ window.PORTFOLIO = {
     },
   ],
 
+  /* --------------------------------------------- DELANTE DE CÁMARA */
+  // Creación de contenido, conducción, actuación, arte. Mismo formato de pieza
+  // que arriba; plataforma puede ser "youtube", "instagram", "tiktok" o "link".
+  // Las carpetas sin piezas se muestran como "en preparación".
+  delante: {
+    intro:
+      "Conduzco Patente Pendiente, creo contenido para redes y trabajo como actor y artista. " +
+      "Lo que pasa del otro lado del lente.",
+    categorias: [
+      { id: "contenido", titulo: "Creación de contenido", piezas: [
+        // {
+        //   titulo: "TODO", cliente: "TODO", rol: "Creador de contenido", tipo: "Reel",
+        //   formato: "vertical", plataforma: "instagram", url: "https://www.instagram.com/reel/XXXX/",
+        //   portada: "assets/thumbs/contenido-1.jpg", metrica: null, descripcion: "TODO",
+        // },
+      ] },
+      { id: "conduccion", titulo: "Conducción", piezas: [] },  // TODO: Patente Pendiente (link a un programa)
+      { id: "actuacion", titulo: "Actuación", piezas: [] },    // TODO: reel de actuación, cortos, obras
+      { id: "arte", titulo: "Arte", piezas: [] },              // TODO: proyectos artísticos
+    ],
+  },
+
   /* --------------------------------------------------------- HERRAMIENTAS */
   herramientas: [
     { nombre: "Adobe Premiere Pro", uso: "Edición" },

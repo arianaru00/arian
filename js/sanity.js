@@ -13,8 +13,8 @@
   var QUERY = '{' +
     '"ajustes": *[_type == "ajustes"] | order(_updatedAt desc)[0]{' +
       'sobreMi, showreel, numeros[]{valor, texto}, streamingIntro, streamingTareas, ' +
-      'herramientas[]{nombre, uso}, contacto, "cv": cv.asset->url},' +
-    '"categorias": *[_type == "categoria"] | order(orden asc, title asc){_id, title},' +
+      'delanteIntro, herramientas[]{nombre, uso}, contacto, "cv": cv.asset->url},' +
+    '"categorias": *[_type == "categoria"] | order(orden asc, title asc){_id, title, lado},' +
     '"proyectos": *[_type == "proyecto" && defined(url)] | order(orden asc, _createdAt asc){' +
       'title, cliente, seccion, "categoria": categoria._ref, rol, tipo, formato, plataforma, url, ' +
       '"portada": portada.asset->url, metrica, descripcion},' +
@@ -28,7 +28,7 @@
       rol: p.rol || "",
       tipo: p.tipo || "",
       formato: p.formato === "vertical" ? "vertical" : "horizontal",
-      plataforma: p.plataforma === "instagram" ? "instagram" : "youtube",
+      plataforma: ["instagram", "tiktok", "link"].indexOf(p.plataforma) >= 0 ? p.plataforma : "youtube",
       url: p.url,
       portada: p.portada ? p.portada + "?w=720&h=1280&fit=crop&auto=format" : null,
       metrica: p.metrica || null,
@@ -54,18 +54,34 @@
     }
 
     var proyectos = r.proyectos || [];
-    if (proyectos.length) {
-      D.edicion = (r.categorias || []).map(function (c) {
+    var cats = r.categorias || [];
+
+    // Arma las carpetas de un lado de la cámara: una por categoría + "Otros" para lo que no tiene
+    function carpetas(lado, seccion, otros) {
+      var propias = cats.filter(function (c) { return (c.lado || "detras") === lado; });
+      var lista = propias.map(function (c) {
         return {
           id: "cat-" + c._id,
           titulo: c.title,
-          piezas: proyectos.filter(function (p) { return p.seccion === "edicion" && p.categoria === c._id; }).map(pieza),
+          piezas: proyectos.filter(function (p) { return p.seccion === seccion && p.categoria === c._id; }).map(pieza),
         };
       });
-      var sinCategoria = proyectos.filter(function (p) {
-        return p.seccion === "edicion" && !(r.categorias || []).some(function (c) { return c._id === p.categoria; });
+      var sueltos = proyectos.filter(function (p) {
+        return p.seccion === seccion && !propias.some(function (c) { return c._id === p.categoria; });
       });
-      if (sinCategoria.length) D.edicion.push({ id: "cat-otros", titulo: "Otros trabajos", piezas: sinCategoria.map(pieza) });
+      if (sueltos.length) lista.push({ id: "cat-otros-" + lado, titulo: otros, piezas: sueltos.map(pieza) });
+      return lista;
+    }
+
+    if (cats.some(function (c) { return c.lado === "delante"; }) || proyectos.some(function (p) { return p.seccion === "delante"; })) {
+      D.delante = {
+        intro: hay(a.delanteIntro) ? a.delanteIntro : (local.delante || {}).intro,
+        categorias: carpetas("delante", "delante", "Otros proyectos"),
+      };
+    }
+
+    if (proyectos.length) {
+      D.edicion = carpetas("detras", "edicion", "Otros trabajos");
       D.streaming = {
         intro: hay(a.streamingIntro) ? a.streamingIntro : (local.streaming || {}).intro,
         tareas: hay(a.streamingTareas) ? a.streamingTareas : (local.streaming || {}).tareas,

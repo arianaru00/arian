@@ -97,7 +97,7 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 - **Cursor** (`.cursor--yellow|cyan`): flecha más etiqueta mono. Solo en el hero.
 - **Caja de selección** (`.selbox` + 4 `.h`): para un elemento protagonista por pantalla. Las tarjetas muestran sus manijas en hover o foco.
 - **Carpeta** (`.panel` + `.panel__tab`): bloque de color con pestaña recortada. Adentro van `.panel__head` (contador mono, título y flechas) y una `.track`.
-- **Carpetas apiladas** (solo en Edición, `#edicionGrupos .group`): el efecto archivero.
+- **Carpetas apiladas** (`.stack > .group`, en Edición y en Delante de cámara): el efecto archivero. En "delante" el ciclo de colores arranca en magenta, para que los dos lados no se vean iguales.
   - Cada carpeta es `position: sticky` y frena **12 px más abajo** que la anterior. `main.js` calcula el `top` (`STACK_STEP`).
   - La siguiente carpeta sube y la tapa. La pestaña de cada una se ubica en `left = (100% − ancho) × i / (n − 1)`, así que al apilarse todas quedan visibles en escalera, como marcadores.
   - La carpeta que va quedando tapada se achica hasta un 3.5% y se oscurece hasta un 28% (`--cover`, de 0 a 1 según cuánto la tapa la siguiente). Las pestañas no se oscurecen.
@@ -105,6 +105,13 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
   - Si una carpeta no entra en pantalla, su `top` pasa a ser negativo: scrollea entera antes de frenar, para no esconder contenido.
   - En el celular la pestaña muestra solo el número (84 px); desde tablet suma el nombre (200 a 260 px).
 - **Tira de piezas** (`.track`): scroll horizontal con *snap*, con flechas que solo aparecen si hay desborde. Mantiene cada carpeta más baja que la pantalla y es lo que hace posible el apilado. Columnas: 86% en el celular, 2 en tablet, 3 en escritorio (2 si son verticales). Con una sola pieza (`--solo`) ocupa el ancho completo y, en escritorio, pone el texto a la izquierda y el video a la derecha.
+- **Interruptor de lado** (`.side-switch`): dos pestañas (`role="tablist"`), **Detrás de cámara** y **Delante de cámara**, con una perilla que se desliza.
+  - La perilla es amarilla para "detrás" y magenta para "delante"; también se mueve con las flechas del teclado.
+  - Controla dos paneles (`.side#detras` / `.side#delante`). Solo uno es visible a la vez.
+  - En "delante" el estado pasa a **REC** con punto magenta titilante, y el timecode del hero suma "● REC".
+  - El link `#delante` abre ese lado directo. Cualquier link interno a una sección del otro lado cambia de lado antes de navegar.
+  - Al final de cada panel hay un botón para pasar al otro lado.
+- **Carpeta vacía** (`.card--empty`): rayado y borde punteado con "Carpeta en preparación". Solo en "Delante de cámara". En Edición, una categoría sin piezas no se muestra.
 - **Barra de marcadores** (`.filters`): links a cada carpeta (`data-jump`). Al hacer clic, la carpeta aterriza en su posición apilada, con la pestaña visible.
 - **Tarjeta de trabajo** (`.card--h` 16:9 / `.card--v` 9:16):
   - Arriba: media con `.cliptag` y, si hay, `.metric`.
@@ -144,7 +151,8 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 |---|---|
 | `#tc` | Timecode real a 25 fps; 1 por segundo con movimiento reducido |
 | `.ruler__head` | `translateX` según el % de scroll |
-| Carpetas de Edición | Apilado `sticky`; la de atrás escala y se oscurece (`--cover`), y la pestaña de adelante sube |
+| Carpetas (Edición y Delante de cámara) | Apilado `sticky`; la de atrás escala y se oscurece (`--cover`), y la pestaña de adelante sube |
+| Interruptor de lado | La perilla se desliza (0.4 s) y cambia de amarillo a magenta |
 | `.dot--live` | Parpadeo `steps(2)` |
 | `.blob` | Flotación de 5s |
 | Botones, tarjetas, cuentas | Desplazamiento de 2–3px y sombra en hover |
