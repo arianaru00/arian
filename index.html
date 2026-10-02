@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arian Martinez · Editor de video y operador de streaming en Buenos Aires</title>
+  <meta name="description" content="Arian Martinez, editor de video y operador de streaming en vivo en Buenos Aires. Edición de reels, cine y videoclips, operación de OBS, switcheo de cámaras y audio en vivo.">
+  <meta name="author" content="Arian Martinez">
+  <meta name="theme-color" content="#0d0e10">
+
+  <!-- Open Graph (WhatsApp, LinkedIn, Facebook) -->
+  <!-- TODO: cuando publiques, reemplazá https://TU-DOMINIO/ por la URL real del sitio
+       (ej. https://arianaru00.github.io/arian/). WhatsApp y LinkedIn necesitan la URL absoluta de la imagen. -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:title" content="Arian Martinez · Editor de video y operador de streaming">
+  <meta property="og:description" content="Edición de video y operación de streaming en vivo en Buenos Aires. Reels, cine, videoclips y transmisiones multicámara.">
+  <meta property="og:url" content="https://TU-DOMINIO/">
+  <meta property="og:image" content="https://TU-DOMINIO/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Arian Martinez, editor de video y operador de streaming en vivo">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d0e10'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23ff5a3c'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="#inicio" aria-label="Arian Martinez, volver al inicio">
+        <span class="rec-dot" aria-hidden="true"></span>Arian Martinez
+      </a>
+      <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">
+        <span class="sr-only">Abrir menú</span>
+        <span class="nav__burger" aria-hidden="true"></span>
+      </button>
+      <nav class="nav__menu" id="navMenu" aria-label="Secciones">
+        <ul>
+          <li><a href="#edicion">Edición</a></li>
+          <li><a href="#streaming">Streaming</a></li>
+          <li><a href="#redes">Redes</a></li>
+          <li><a href="#produccion">Producción</a></li>
+          <li><a href="#herramientas">Herramientas</a></li>
+          <li><a href="#contacto" class="nav__cta">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="playhead" aria-hidden="true"><span id="playhead"></span></div>
+  </header>
+
+  <main id="contenido">
+    <!-- ============================================================ HERO -->
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="wrap">
+        <p class="hero__kicker mono"><span class="rec-dot" aria-hidden="true"></span>REC · Buenos Aires, Argentina</p>
+        <h1 class="hero__title" id="hero-title">Arian<br>Martinez</h1>
+        <p class="hero__role">Editor de video y operador de streaming en vivo</p>
+        <div class="hero__actions">
+          <a class="btn btn--accent" href="#edicion">Ver trabajos</a>
+          <a class="btn btn--ghost" href="#contacto">Contacto</a>
+        </div>
+
+        <div class="showreel" id="showreel">
+          <!-- Se completa desde data/trabajos.js → showreel -->
+        </div>
+
+        <div class="about">
+          <h2 class="about__label mono">Sobre mí</h2>
+          <p id="sobreMi"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= NÚMEROS -->
+    <section class="stats" aria-label="Números destacados">
+      <div class="wrap">
+        <ul class="stats__list" id="numeros"></ul>
+      </div>
+    </section>
+
+    <!-- ========================================================= EDICIÓN -->
+    <section class="section section--main" id="edicion" aria-labelledby="edicion-title">
+      <div class="wrap">
+        <header class="section__head">
+          <p class="section__tc mono">01 · TC 00:01:00:00</p>
+          <h2 class="section__title" id="edicion-title">Edición</h2>
+          <p class="section__lead">Piezas verticales para redes, cine, videoclip e institucional. Corte, ritmo, color y sonido.</p>
+        </header>
+        <div class="filters" role="group" aria-label="Filtrar trabajos de edición" id="edicionFiltros"></div>
+        <div id="edicionGrupos" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================= STREAMING -->
+    <section class="section" id="streaming" aria-labelledby="streaming-title">
+      <div class="wrap">
+        <header class="section__head">
+          <p class="section__tc mono">02 · <span class="live">EN VIVO</span></p>
+          <h2 class="section__title" id="streaming-title">Streaming en vivo</h2>
+          <p class="section__lead" id="streamingIntro"></p>
+          <ul class="chips" id="streamingTareas" aria-label="Rol técnico"></ul>
+        </header>
+        <div class="grid" id="streamingGrid"></div>
+      </div>
+    </section>
+
+    <!-- =========================================================== REDES -->
+    <section class="section" id="redes" aria-labelledby="redes-title">
+      <div class="wrap">
+        <header class="section__head">
+          <p class="section__tc mono">03 · TC 00:03:00:00</p>
+          <h2 class="section__title" id="redes-title">Redes y community management</h2>
+          <p class="section__lead">Cuentas que edito, alimento y gestiono.</p>
+        </header>
+        <div class="grid" id="redesGrid"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================== PRODUCCIÓN -->
+    <section class="section" id="produccion" aria-labelledby="produccion-title">
+      <div class="wrap">
+        <header class="section__head">
+          <p class="section__tc mono">04 · TC 00:04:00:00</p>
+          <h2 class="section__title" id="produccion-title">Producción</h2>
+          <p class="section__lead">Proyectos donde coordiné equipo, tiempos y recursos.</p>
+        </header>
+        <div class="grid" id="produccionGrid"></div>
+      </div>
+    </section>
+
+    <!-- ==================================================== HERRAMIENTAS -->
+    <section class="section section--tight" id="herramientas" aria-labelledby="herramientas-title">
+      <div class="wrap">
+        <header class="section__head">
+          <p class="section__tc mono">05 · TC 00:05:00:00</p>
+          <h2 class="section__title" id="herramientas-title">Herramientas</h2>
+        </header>
+        <ul class="tools" id="herramientasLista"></ul>
+      </div>
+    </section>
+
+    <!-- ======================================================== CONTACTO -->
+    <section class="section contact" id="contacto" aria-labelledby="contacto-title">
+      <div class="wrap">
+        <header class="section__head">
+          <p class="section__tc mono">06 · FIN DE CINTA</p>
+          <h2 class="section__title" id="contacto-title">Hablemos</h2>
+          <p class="section__lead">Busco proyectos de edición y operación en vivo. Respondo rápido.</p>
+        </header>
+        <ul class="contact__list" id="contactoLista"></ul>
+        <a class="btn btn--accent btn--lg" id="cvLink" href="assets/cv-arian-martinez.pdf" download>Descargar CV (PDF)</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap mono">© <span id="year">2026</span> Arian Martinez · Buenos Aires</div>
+  </footer>
+
+  <noscript><p class="noscript">Este sitio necesita JavaScript para mostrar los trabajos.</p></noscript>
+
+  <script src="data/trabajos.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
