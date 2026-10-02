@@ -627,3 +627,93 @@ svg { display: block; }
   border-style: dashed; background: repeating-linear-gradient(45deg, var(--paper-2) 0 12px, var(--white) 12px 24px);
 }
 .card--empty p { font-weight: 600; }
+
+/* ================================================================ Movimiento
+   Solo con html.motion (lo agrega js/motion.js; nunca con movimiento reducido) */
+
+/* Cursor "VOS" (sigue al mouse; el cursor del sistema se sigue viendo) */
+.you {
+  position: fixed; left: 0; top: 0; z-index: 90; pointer-events: none;
+  display: flex; align-items: flex-start; gap: 4px; opacity: 0; transition: opacity 0.2s;
+}
+.you.is-on { opacity: 1; }
+.you__dot { width: 10px; height: 10px; margin: 14px 0 0 12px; border-radius: 50%; background: var(--ink); }
+.you__tag {
+  margin-top: 20px; padding: 2px 8px; border-radius: 999px; background: var(--ink); color: var(--white);
+  font: 600 0.6rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.you.is-action .you__tag { background: var(--yellow); color: var(--ink); }
+
+/* Marcador de la regla en la posición del mouse */
+.ruler__hover {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 1px; background: var(--sel);
+  opacity: 0; transition: opacity 0.2s; pointer-events: none;
+}
+.ruler__hover.is-on { opacity: 1; }
+.ruler__hover-tc {
+  position: absolute; top: 2px; left: 4px; padding: 0 5px; background: var(--sel); color: var(--white);
+  font: 600 0.58rem var(--f-mono); letter-spacing: 0.04em;
+}
+
+/* Stickers arrastrables */
+.motion [data-drag] { cursor: grab; touch-action: none; user-select: none; }
+.motion [data-drag].is-dragging { cursor: grabbing; z-index: 6; filter: drop-shadow(4px 6px 0 rgba(22, 22, 26, 0.25)); }
+
+/* Títulos pixel que se encienden letra a letra */
+.pw { white-space: nowrap; }
+.motion .pc { color: var(--line); transition: color 0.25s; }
+.motion .pc.on { color: inherit; animation: pc-flash 0.35s ease-out; }
+@keyframes pc-flash { 0% { background: var(--cyan); } 100% { background: transparent; } }
+.motion .showreel__label .pc, .motion .panel--ink .pc { color: inherit; }
+
+/* Texto que se revela palabra por palabra con el scroll */
+.motion .about__text .w { color: #b9b8ae; transition: color 0.3s; }
+.motion .about__text .w.on { color: var(--ink); }
+
+/* Aparición con rebote al entrar en pantalla */
+.motion .rv { opacity: 0; translate: 0 26px; scale: 0.97; }
+.motion .rv.in {
+  opacity: 1; translate: 0 0; scale: 1;
+  transition: opacity 0.5s ease var(--d, 0ms), translate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) var(--d, 0ms), scale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) var(--d, 0ms);
+}
+
+/* Hero: entrada de stickers al cargar */
+.motion .stage > * { animation: pop-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.motion .stage > :nth-child(1) { animation-delay: 0.15s; }
+.motion .stage > :nth-child(2) { animation-delay: 0.25s; }
+.motion .stage > :nth-child(3) { animation-delay: 0.35s; }
+.motion .stage > :nth-child(5) { animation-delay: 0.5s; }
+.motion .stage > :nth-child(6) { animation-delay: 0.6s; }
+.motion .stage > :nth-child(7) { animation-delay: 0.7s; }
+@keyframes pop-in { from { opacity: 0; scale: 0.6; } to { opacity: 1; scale: 1; } }
+.motion .selbox .h { animation: pop-in 0.4s ease-out 0.9s both; }
+
+/* Arco del hero: se dibuja al cargar */
+.motion .arc path { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: draw 1.6s ease-out 0.6s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* Menú: bloque negro que se desliza entre los links */
+.nav__pill { display: none; }
+@media (min-width: 900px) {
+  .has-pill { position: relative; }
+  .nav__pill {
+    display: block; position: absolute; left: 0; top: 0; bottom: 0; z-index: 0; pointer-events: none;
+    background: var(--ink); opacity: 0; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s;
+  }
+  .has-pill.pill-on .nav__pill { opacity: 1; }
+  .has-pill li:not(.nav__pill) { position: relative; z-index: 1; }
+  .has-pill a:not(.nav__cta):hover { background: transparent; color: var(--white); }
+}
+
+/* Blob: parpadeo y bamboleo */
+.blob__eyes rect { transform-box: fill-box; transform-origin: center; }
+@keyframes blink-eye { 0%, 93%, 100% { scale: 1 1; } 95% { scale: 1 0.1; } }
+.motion .blob__eyes rect { animation: blink-eye 5s infinite; }
+.motion .blob { animation: wobble 6s ease-in-out infinite; }
+@keyframes wobble { 0%, 100% { rotate: 0deg; translate: 0 0; } 33% { rotate: -6deg; translate: 0 -8px; } 66% { rotate: 5deg; translate: 0 4px; } }
+
+/* Rayas de contacto en movimiento */
+/* La baldosa mide exactamente un período de raya en X e Y (92/sin55°, 92/cos55°), así no hay costura */
+.motion .contact-card { background-size: 112.31px 160.4px; animation: stripes 6s linear infinite; }
+@keyframes stripes { to { background-position: 112.3px 0; } }

@@ -316,6 +316,10 @@
     setupStack();
     sideFromHash();
 
+    // Aviso para js/motion.js (animaciones que dependen del contenido)
+    window.__portfolioRendered = true;
+    document.dispatchEvent(new CustomEvent("portfolio:render"));
+
     // Aviso TODO (solo consola)
     var todos = [];
     (function walk(o, path) {

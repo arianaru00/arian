@@ -94,7 +94,8 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 - **Botón** (`.btn--ink` / `.btn--ghost`): borde de 2px, texto mono en mayúsculas, alto mínimo de 48px. El primario lleva un ícono `>>` en un cuadrado cyan. En hover se levanta (`translate(-2px,-2px)`) y aparece la sombra dura; en active se hunde.
 - **Botón grande** (`.bigbtn`): solo uno en el sitio, en Contacto.
 - **Sticker** (`.sticker--mint|butter|magenta|live`): borde de 1.5px, sombra de 2px y rotación de −7° a +12°. Lleva datos reales, nunca relleno.
-- **Cursor** (`.cursor--yellow|cyan`): flecha más etiqueta mono. Solo en el hero.
+- **Cursor** (`.cursor--yellow|cyan`): flecha más etiqueta mono. Solo en el hero; deambula y se arrastra (ver §6).
+- **Cursor "VOS"** (`.you`): el único cursor que sigue al mouse. No reemplaza al cursor del sistema, lo acompaña.
 - **Caja de selección** (`.selbox` + 4 `.h`): para un elemento protagonista por pantalla. Las tarjetas muestran sus manijas en hover o foco.
 - **Carpeta** (`.panel` + `.panel__tab`): bloque de color con pestaña recortada. Adentro van `.panel__head` (contador mono, título y flechas) y una `.track`.
 - **Carpetas apiladas** (`.stack > .group`, en Edición y en Delante de cámara): el efecto archivero. En "delante" el ciclo de colores arranca en magenta, para que los dos lados no se vean iguales.
@@ -147,17 +148,36 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 
 ## 6. Movimiento
 
+**Idea:** el sitio es una mesa de trabajo compartida, como un archivo de Figma con gente conectada. Las cosas flotan, se pueden agarrar y reaccionan al mouse. Todo vive en `js/motion.js` y solo corre si `html` tiene la clase `.motion`, que se agrega cuando el dispositivo **no** pide movimiento reducido.
+
 | Elemento | Animación |
 |---|---|
+| Stickers del hero | Flotan sin repetir el mismo recorrido: mezcla de senos de ±3 a 14 px y ±2 a 8°. Se corren un poco hacia el mouse (10–16 px) y con el scroll (parallax de 0.04 a 0.18). Entran con un pop al cargar. |
+| Cursores del hero ("Editor de video", "Streaming en vivo") | Deambulan más (±26–34 px), como colaboradores moviendo el mouse |
+| Arrastre (`[data-drag]`) | Con mouse, cualquier sticker o cursor del hero se agarra y queda donde lo soltás. En táctil está desactivado, para no trabar el scroll. |
+| Cursor "VOS" (`.you`) | Punto y etiqueta que siguen al mouse con un leve retraso (lerp 0.32). La etiqueta cambia según lo que hay debajo: **Play** (video), **Abrir** (reel), **Arrastrá**, **Cambiar** (interruptor) o **Clic**. El cursor del sistema **se sigue viendo**. Solo en dispositivos con mouse. |
+| Regla (`.ruler__hover`) | Línea cyan con el timecode de la posición del mouse (100 px = 10 s) |
+| `.pixel-title` y `.hero__title` | Al entrar en pantalla, las letras pasan de `--line` a tinta en secuencia (55 ms cada una), con un destello cyan de "selección" |
+| `#sobreMi` | Las palabras pasan de gris a tinta según el avance del scroll |
+| `[data-scroll-rot]` ("¿Qué onda?") | Arranca rotado −10° y se endereza al entrar |
+| Tarjetas, stats, chips, notas, polaroids, comentario, botón CONTACTO | Entran con un rebote (`translate` + `scale`, curva con overshoot), escalonadas 70 ms entre hermanos |
+| Menú (escritorio) | Un bloque negro (`.nav__pill`) se desliza bajo el link con hover |
+| Blob | Se bambolea (6 s), parpadea cada 5 s y **mira al mouse** |
+| Tarjeta de contacto | Las rayas avanzan sin fin; la baldosa mide exactamente un período, así no hay costura |
 | `#tc` | Timecode real a 25 fps; 1 por segundo con movimiento reducido |
 | `.ruler__head` | `translateX` según el % de scroll |
 | Carpetas (Edición y Delante de cámara) | Apilado `sticky`; la de atrás escala y se oscurece (`--cover`), y la pestaña de adelante sube |
 | Interruptor de lado | La perilla se desliza (0.4 s) y cambia de amarillo a magenta |
 | `.dot--live` | Parpadeo `steps(2)` |
-| `.blob` | Flotación de 5s |
-| Botones, tarjetas, cuentas | Desplazamiento de 2–3px y sombra en hover |
+| Botones, tarjetas, cuentas | Desplazamiento de 2–3 px y sombra en hover |
 
-Solo se animan `transform` y `opacity`. Con `prefers-reduced-motion` todo queda quieto: el apilado se mantiene porque es layout, pero sin escala ni oscurecido.
+**Reglas**
+- Solo se animan `transform` (o `translate`/`rotate`/`scale`), `opacity` y `color`. No se animan `top`, `left`, `width` ni `height`, salvo el bloque del menú.
+- Las animaciones de `motion.js` usan las propiedades individuales `translate` y `rotate`, que se suman al `transform` de CSS. Así un sticker conserva su rotación de diseño y además flota.
+- Hay **un solo** `requestAnimationFrame`. El hero y el blob solo se calculan cuando están en pantalla.
+- Los textos partidos en letras o palabras llevan `aria-label` con el texto completo, y sus partes van con `aria-hidden`. El lector de pantalla los lee normal.
+- Con `prefers-reduced-motion` no se carga nada de esto (`motion.js` sale al principio). El apilado de carpetas se mantiene porque es layout, pero sin escala ni oscurecido.
+- Si agregás un elemento que entra con rebote, sumalo al selector `REVEAL` de `motion.js`. No pongas `.rv` a mano.
 
 ---
 
