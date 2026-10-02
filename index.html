@@ -131,7 +131,7 @@
           <h2 class="pixel-title" id="edicion-title">Edición</h2>
           <p class="note">Reels para redes, cine, videoclip e institucional. Corte, ritmo, color y sonido.</p>
         </header>
-        <div class="filters" role="group" aria-label="Filtrar trabajos de edición" id="edicionFiltros"></div>
+        <nav class="filters" aria-label="Categorías de edición" id="edicionFiltros"></nav>
         <div id="edicionGrupos" aria-live="polite"></div>
       </div>
     </section>
@@ -147,10 +147,16 @@
         <div class="panel panel--ink">
           <p class="panel__tab mono">Transmisiones</p>
           <div class="panel__head">
-            <p class="mono">Mi rol técnico</p>
-            <ul class="tags" id="streamingTareas" aria-label="Rol técnico"></ul>
+            <div>
+              <p class="mono">Mi rol técnico</p>
+              <ul class="tags" id="streamingTareas" aria-label="Rol técnico"></ul>
+            </div>
+            <div class="track__nav" hidden>
+              <button type="button" class="track__btn" data-dir="-1" aria-label="Transmisiones anteriores"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
+              <button type="button" class="track__btn" data-dir="1" aria-label="Transmisiones siguientes"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7"/></svg></button>
+            </div>
           </div>
-          <div class="grid" id="streamingGrid"></div>
+          <div class="track" id="streamingGrid"></div>
         </div>
       </div>
     </section>
@@ -177,7 +183,14 @@
         </header>
         <div class="panel panel--green">
           <p class="panel__tab mono">Producción</p>
-          <div class="grid" id="produccionGrid"></div>
+          <div class="panel__head">
+            <div><p class="mono">Coordinación de equipo, tiempos y recursos</p></div>
+            <div class="track__nav" hidden>
+              <button type="button" class="track__btn" data-dir="-1" aria-label="Proyectos anteriores"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
+              <button type="button" class="track__btn" data-dir="1" aria-label="Proyectos siguientes"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+          <div class="track" id="produccionGrid"></div>
         </div>
       </div>
     </section>

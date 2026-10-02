@@ -96,11 +96,20 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 - **Sticker** (`.sticker--mint|butter|magenta|live`): borde de 1.5px, sombra de 2px y rotación de −7° a +12°. Lleva datos reales, nunca relleno.
 - **Cursor** (`.cursor--yellow|cyan`): flecha más etiqueta mono. Solo en el hero.
 - **Caja de selección** (`.selbox` + 4 `.h`): para un elemento protagonista por pantalla. Las tarjetas muestran sus manijas en hover o foco.
-- **Carpeta** (`.panel` + `.panel__tab`): bloque de color con pestaña recortada y posición alternada (`--tab-left|center|right`). Adentro van `.panel__head` (contador mono + título) y una `.grid`.
+- **Carpeta** (`.panel` + `.panel__tab`): bloque de color con pestaña recortada. Adentro van `.panel__head` (contador mono, título y flechas) y una `.track`.
+- **Carpetas apiladas** (solo en Edición, `#edicionGrupos .group`): el efecto archivero.
+  - Cada carpeta es `position: sticky` y frena **12 px más abajo** que la anterior. `main.js` calcula el `top` (`STACK_STEP`).
+  - La siguiente carpeta sube y la tapa. La pestaña de cada una se ubica en `left = (100% − ancho) × i / (n − 1)`, así que al apilarse todas quedan visibles en escalera, como marcadores.
+  - La carpeta que va quedando tapada se achica hasta un 3.5% y se oscurece hasta un 28% (`--cover`, de 0 a 1 según cuánto la tapa la siguiente). Las pestañas no se oscurecen.
+  - La carpeta de adelante (`.is-front`) levanta su pestaña de 32 a 38 px, y la barra de marcadores (`.filters`) la marca con `aria-current`.
+  - Si una carpeta no entra en pantalla, su `top` pasa a ser negativo: scrollea entera antes de frenar, para no esconder contenido.
+  - En el celular la pestaña muestra solo el número (84 px); desde tablet suma el nombre (200 a 260 px).
+- **Tira de piezas** (`.track`): scroll horizontal con *snap*, con flechas que solo aparecen si hay desborde. Mantiene cada carpeta más baja que la pantalla y es lo que hace posible el apilado. Columnas: 86% en el celular, 2 en tablet, 3 en escritorio (2 si son verticales). Con una sola pieza (`--solo`) ocupa el ancho completo y, en escritorio, pone el texto a la izquierda y el video a la derecha.
+- **Barra de marcadores** (`.filters`): links a cada carpeta (`data-jump`). Al hacer clic, la carpeta aterriza en su posición apilada, con la pestaña visible.
 - **Tarjeta de trabajo** (`.card--h` 16:9 / `.card--v` 9:16):
   - Arriba: media con `.cliptag` y, si hay, `.metric`.
   - Abajo: tipo (mono con punto magenta), título, cliente, descripción, tags (rol en tinta, formato en blanco) y link "Ver en YouTube ↗".
-  - Si es la única pieza horizontal de su carpeta, en escritorio pasa a layout horizontal (texto a la izquierda, video a la derecha).
+  - Las verticales (9:16) siempre van en fila: portada al 42% y datos al costado.
 - **Métrica** (`.metric`): sticker amarillo rotado −3° con el número en pixel. En tarjetas verticales del celular se ve solo el número (la palabra "reproducciones" queda para lectores de pantalla).
 - **Lite embed**: miniatura de YouTube con un botón de play cuadrado blanco (amarillo en hover). El iframe de `youtube-nocookie` se carga recién al hacer clic.
 - **Reel de Instagram**: portada 9:16 local o de Sanity. Si no hay portada, se muestra un rayado diagonal con "9:16" y el nombre de la cuenta.
@@ -115,14 +124,16 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 - Contenedor `max-width: 1200px` con un gutter de 16px.
 - Secciones con `padding: clamp(56px, 10vw, 104px) 0`.
 - **Cabecera de sección** centrada: nota a mano → `.pixel-title` → `.note`.
-- **Grilla:** 1 columna en el celular, 2 desde 640px y 3 desde 1000px. En carpetas solo verticales hay 4 columnas en escritorio.
+- **Grilla** (cuentas de redes): 1 columna en el celular, 2 desde 640px y 3 desde 1000px.
+- **Piezas de video:** siempre en `.track` dentro de una carpeta, nunca en grilla suelta.
 - **Hero centrado.** Es una excepción deliberada, porque la referencia es simétrica. Los stickers flotan alrededor de la caja dentro de `.stage` (max 920px). Pueden pisar el borde de la caja, pero **nunca tapar texto**.
 - El arco fino (`.arc`) separa el hero del resto. Se usa una sola vez.
 
 ### Responsive
 - Mobile-first. Sin scroll horizontal: es un error crítico, verificalo a 390px.
-- En el celular, las tarjetas verticales se ponen en fila (portada al 42% y datos al lado), para que un 9:16 no ocupe toda la pantalla.
-- Los filtros se deslizan horizontalmente en el celular y se centran en tablet o más.
+- Las tarjetas verticales van en fila (portada al 42% y datos al lado), para que un 9:16 no ocupe toda la pantalla.
+- La barra de marcadores se desliza horizontalmente en el celular y se centra en tablet o más.
+- Cualquier elemento con `position: absolute` dentro de una `.track` necesita un ancestro posicionado dentro de la tira. Si no, desborda la página (por eso `.track` y `.card` son `position: relative`).
 - Las áreas táctiles miden 44px como mínimo.
 
 ---
@@ -133,11 +144,12 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 |---|---|
 | `#tc` | Timecode real a 25 fps; 1 por segundo con movimiento reducido |
 | `.ruler__head` | `translateX` según el % de scroll |
+| Carpetas de Edición | Apilado `sticky`; la de atrás escala y se oscurece (`--cover`), y la pestaña de adelante sube |
 | `.dot--live` | Parpadeo `steps(2)` |
 | `.blob` | Flotación de 5s |
 | Botones, tarjetas, cuentas | Desplazamiento de 2–3px y sombra en hover |
 
-Solo se animan `transform` y `opacity`. Con `prefers-reduced-motion` todo queda quieto.
+Solo se animan `transform` y `opacity`. Con `prefers-reduced-motion` todo queda quieto: el apilado se mantiene porque es layout, pero sin escala ni oscurecido.
 
 ---
 

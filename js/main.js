@@ -146,7 +146,6 @@
   function visible(list) { return (list || []).filter(function (p) { return p && p.url; }); }
 
   var PANEL_COLORS = ["cyan", "ink", "yellow", "magenta"];
-  var TAB_POS = ["left", "center", "right"];
   var AVATAR_COLORS = ["cyan", "yellow", "magenta", "green"];
 
   // "OBS Studio" → OBS · "RodeCaster II Pro" → RC · "Walter Rippel" → WR · "ffmpeg" → FF
@@ -157,6 +156,31 @@
     if (caps.length >= 2) return caps.slice(0, 2).join("");
     if (parts.length > 1) return (parts[0][0] + parts[1][0]).toUpperCase();
     return w.slice(0, 2).toUpperCase();
+  }
+
+  function slug(str) { return String(str).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+
+  var NAV_BTNS =
+    '<div class="track__nav" hidden>' +
+      '<button type="button" class="track__btn" data-dir="-1" aria-label="Piezas anteriores"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>' +
+      '<button type="button" class="track__btn" data-dir="1" aria-label="Piezas siguientes"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7"/></svg></button>' +
+    "</div>";
+
+  function panelHead(count, title) {
+    return '<div class="panel__head"><div><p class="mono"><span class="dot" aria-hidden="true"></span>' + count + "</p>" + (title || "") + "</div>" + NAV_BTNS + "</div>";
+  }
+
+  // Tira horizontal de piezas: mantiene cada carpeta baja para que el apilado no tape nada
+  function trackClass(piezas) {
+    var vertical = piezas.every(function (p) { return p.formato === "vertical"; });
+    return "track" + (vertical ? " track--v" : "") + (piezas.length === 1 ? " track--solo" : "");
+  }
+  function track(piezas, lvl) {
+    return '<div class="' + trackClass(piezas) + '">' + piezas.map(function (p) { return workCard(p, lvl); }).join("") + "</div>";
+  }
+  function fillTrack(el, piezas) {
+    el.className = trackClass(piezas);
+    el.innerHTML = piezas.map(function (p) { return workCard(p); }).join("");
   }
 
   /* ---------------------------------------------------------- Render */
@@ -184,44 +208,35 @@
         '</span><span class="stat__text">' + esc(n.texto) + "</span></li>";
     }).join("");
 
-    // Edición: una carpeta de color por categoría
+    // Edición: una carpeta de color por categoría, apiladas como en un archivero
     var grupos = (D.edicion || []).filter(function (g) { return visible(g.piezas).length; });
+    var n1 = Math.max(grupos.length - 1, 1);
 
     $("#edicionGrupos").innerHTML = grupos.map(function (g, i) {
       var piezas = visible(g.piezas);
-      var vertical = piezas.every(function (p) { return p.formato === "vertical"; });
+      var anchor = "carpeta-" + slug(g.id);
       return (
-        '<div class="group panel panel--' + PANEL_COLORS[i % PANEL_COLORS.length] + " panel--tab-" + TAB_POS[i % TAB_POS.length] +
-          '" data-group="' + esc(g.id) + '">' +
-          '<p class="panel__tab mono">Categoría ' + pad(i + 1) + "</p>" +
-          '<div class="panel__head"><p class="mono"><span class="dot" aria-hidden="true"></span>' + piezas.length +
-            (piezas.length === 1 ? " pieza" : " piezas") + "</p>" +
-            '<h3 class="panel__title">' + esc(g.titulo) + "</h3></div>" +
-          '<div class="grid' + (vertical ? " grid--v" : "") + '">' + piezas.map(function (p) { return workCard(p, 4); }).join("") + "</div>" +
+        '<div class="group__gap" id="' + anchor + '"></div>' +
+        '<div class="group panel panel--' + PANEL_COLORS[i % PANEL_COLORS.length] + '" data-group="' + esc(g.id) +
+          '" style="--i:' + i + ";--n1:" + n1 + '">' +
+          '<a class="panel__tab mono" href="#' + anchor + '" data-jump><span class="panel__tab-n">' + pad(i + 1) + "</span>" +
+            '<span class="panel__tab-name">' + esc(g.titulo) + "</span></a>" +
+          panelHead(piezas.length + (piezas.length === 1 ? " pieza" : " piezas"), '<h3 class="panel__title">' + esc(g.titulo) + "</h3>") +
+          track(piezas, 4) +
         "</div>"
       );
     }).join("");
 
-    var filtros = $("#edicionFiltros");
-    filtros.innerHTML = [{ id: "todo", titulo: "Todo" }].concat(grupos).map(function (g, i) {
-      return '<button type="button" class="filter" data-filter="' + esc(g.id) + '" aria-pressed="' + (i === 0) + '">' + esc(g.titulo) + "</button>";
+    $("#edicionFiltros").innerHTML = grupos.map(function (g, i) {
+      return '<a class="filter" href="#carpeta-' + slug(g.id) + '" data-jump data-i="' + i + '">' +
+        '<span class="filter__n">' + pad(i + 1) + "</span>" + esc(g.titulo) + "</a>";
     }).join("");
-
-    filtros.addEventListener("click", function (ev) {
-      var btn = ev.target.closest(".filter");
-      if (!btn) return;
-      var f = btn.dataset.filter;
-      filtros.querySelectorAll(".filter").forEach(function (b) { b.setAttribute("aria-pressed", b === btn); });
-      document.querySelectorAll("#edicionGrupos .group").forEach(function (g) {
-        g.hidden = f !== "todo" && g.dataset.group !== f;
-      });
-    });
 
     // Streaming
     var st = D.streaming || {};
     $("#streamingIntro").textContent = st.intro || "";
     $("#streamingTareas").innerHTML = (st.tareas || []).map(function (t) { return '<li class="tag tag--light">' + esc(t) + "</li>"; }).join("");
-    $("#streamingGrid").innerHTML = visible(st.piezas).map(function (p) { return workCard(p); }).join("");
+    fillTrack($("#streamingGrid"), visible(st.piezas));
 
     // Redes: tarjetas tipo comentario
     $("#redesGrid").innerHTML = (D.redes || []).map(function (r, i) {
@@ -242,7 +257,7 @@
     }).join("");
 
     // Producción
-    $("#produccionGrid").innerHTML = visible(D.produccion).map(function (p) { return workCard(p); }).join("");
+    fillTrack($("#produccionGrid"), visible(D.produccion));
 
     // Herramientas
     $("#herramientasLista").innerHTML = (D.herramientas || []).map(function (h, i) {
@@ -273,6 +288,9 @@
 
     $("#year").textContent = new Date().getFullYear();
 
+    setupTracks();
+    setupStack();
+
     // Aviso TODO (solo consola)
     var todos = [];
     (function walk(o, path) {
@@ -283,6 +301,92 @@
       console.info("[portfolio] Quedan " + todos.length + " campos con TODO (fuente: " + (D._fuente || "data/trabajos.js") + "):\n- " + todos.join("\n- "));
     }
   }
+
+  /* ------------------------------------------------------ Tiras (track) */
+  function setupTracks() {
+    document.querySelectorAll(".panel").forEach(function (panel) {
+      var tr = panel.querySelector(".track"), nav = panel.querySelector(".track__nav");
+      if (!tr || !nav) return;
+      function update() {
+        var over = tr.scrollWidth > tr.clientWidth + 4;
+        nav.hidden = !over;
+        if (!over) return;
+        nav.querySelector('[data-dir="-1"]').disabled = tr.scrollLeft < 4;
+        nav.querySelector('[data-dir="1"]').disabled = tr.scrollLeft + tr.clientWidth > tr.scrollWidth - 4;
+      }
+      nav.addEventListener("click", function (ev) {
+        var b = ev.target.closest(".track__btn");
+        if (b) tr.scrollBy({ left: +b.dataset.dir * tr.clientWidth * 0.85, behavior: reduceMotion ? "auto" : "smooth" });
+      });
+      tr.addEventListener("scroll", update, { passive: true });
+      addEventListener("resize", update);
+      update();
+    });
+  }
+
+  /* ------------------------------------- Carpetas apiladas (marcadores) */
+  // Cada carpeta queda pegada 12 px más abajo que la anterior; la siguiente la tapa
+  // y deja a la vista su pestaña. Si una carpeta no entra en pantalla, scrollea
+  // entera antes de frenar (top negativo) para no esconder contenido.
+  var STACK_STEP = 12;
+  var stack = [];
+
+  function layoutStack() {
+    var nav = $("#nav"), base = nav.offsetHeight + 44;
+    stack.forEach(function (g, i) {
+      var want = base + i * STACK_STEP, h = g.offsetHeight;
+      g._top = h > innerHeight - want - 16 ? Math.round(innerHeight - h - 16) : want;
+      g.style.top = g._top + "px";
+    });
+    updateStack();
+  }
+
+  function updateStack() {
+    if (!stack.length) return;
+    var front = 0;
+    stack.forEach(function (g, i) {
+      var r = g.getBoundingClientRect();
+      if (r.top <= g._top + 2) front = i;
+      var next = stack[i + 1], cover = 0;
+      if (next && !reduceMotion) {
+        var dist = next.getBoundingClientRect().top - next._top;
+        cover = Math.max(0, Math.min(1, 1 - dist / (innerHeight * 0.6)));
+      }
+      g.style.setProperty("--cover", cover.toFixed(3));
+    });
+    stack.forEach(function (g, i) { g.classList.toggle("is-front", i === front); });
+    document.querySelectorAll("#edicionFiltros .filter").forEach(function (a) {
+      if (+a.dataset.i === front) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+    });
+  }
+
+  function setupStack() {
+    stack = [].slice.call(document.querySelectorAll("#edicionGrupos .group"));
+    layoutStack();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutStack);
+  }
+
+  var stackRaf = 0;
+  addEventListener("scroll", function () {
+    if (stackRaf) return;
+    stackRaf = requestAnimationFrame(function () { stackRaf = 0; updateStack(); });
+  }, { passive: true });
+  var stackRt;
+  addEventListener("resize", function () { clearTimeout(stackRt); stackRt = setTimeout(layoutStack, 120); });
+
+  // Saltar a una carpeta: la deja en su posición apilada, con la pestaña a la vista
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest("[data-jump]");
+    if (!a) return;
+    var gap = document.getElementById(a.getAttribute("href").slice(1));
+    var g = gap && gap.nextElementSibling;
+    if (!g) return;
+    ev.preventDefault();
+    var y = gap.getBoundingClientRect().bottom + scrollY - (g._top || 0);
+    scrollTo({ top: y, behavior: reduceMotion ? "auto" : "smooth" });
+    var first = g.querySelector(".lite, .reel, a, button");
+    if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, reduceMotion ? 0 : 450);
+  });
 
   /* ------------------------------------------------------- Navegación */
   var toggle = $("#navToggle"), menu = $("#navMenu");
