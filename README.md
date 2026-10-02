@@ -6,11 +6,12 @@ Sitio de una sola página: HTML, CSS y JS puros, sin build. Se sube tal cual a G
 
 ```
 index.html            estructura, SEO y Open Graph
-css/styles.css        estilos (mobile-first, tema oscuro)
+css/styles.css        estilos (mobile-first, ver DESIGN.md)
 js/main.js            arma las tarjetas desde los datos, lite-embed de YouTube, filtros, menú
-data/trabajos.js      TODO el contenido: piezas, métricas, redes, herramientas, contacto
+data/trabajos.js      respaldo local del contenido (el principal está en Sanity)
 assets/og-image.jpg   imagen que se ve al compartir el link (1200×630)
-assets/thumbs/        portadas de los reels de Instagram (las agregás vos)
+assets/thumbs/        portadas locales de reels (o subilas en Sanity)
+assets/fotos/         polaroids de "Sobre mí": arian.jpg y setup.jpg
 ```
 
 ## Editar contenido (Sanity)
