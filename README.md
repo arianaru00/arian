@@ -44,12 +44,21 @@ python3 -m http.server 8080
 # abrir http://localhost:8080
 ```
 
-## Publicar en GitHub Pages
+## Ramas y publicación
 
-1. Subí estos archivos a la rama `main` del repo (o mergeá esta rama).
-2. En GitHub: **Settings → Pages → Build and deployment → Source: Deploy from a branch**, rama `main`, carpeta `/ (root)`. Guardar.
-3. En 1–2 minutos queda en `https://<usuario>.github.io/<repo>/`.
-4. Reemplazá `https://TU-DOMINIO/` en `index.html` (etiquetas `og:url` y `og:image`) por esa URL y volvé a subir.
-5. Probá cómo se ve el link en https://www.opengraph.xyz/ o pegándolo en un chat de WhatsApp.
+| Rama | Para qué | ¿Se publica? |
+|---|---|---|
+| `main` | La versión oficial | Sí: cada push a `main` corre `.github/workflows/pages.yml` y actualiza https://arianaru00.github.io/arian/ en 1–2 minutos |
+| `pruebas` | Probar cambios de diseño o código | No. El workflow solo escucha `main` |
+
+**Cómo probar algo:**
+1. Trabajá en `pruebas` (`git checkout pruebas`) y subí ahí los cambios.
+2. Miralo en tu compu con `python3 -m http.server 8080` → http://localhost:8080
+3. Cuando te guste, pasalo a la versión oficial: `git checkout main && git merge pruebas && git push`. Ese push publica.
+4. Para empezar de nuevo desde lo publicado: `git checkout pruebas && git reset --hard origin/main && git push --force`.
+
+**Ojo con el contenido:** los proyectos y textos vienen de Sanity, que es uno solo para las dos ramas. Lo que publiques en el Studio aparece en el sitio oficial aunque estés probando en `pruebas`. Para probar contenido sin que se vea, dejalo como borrador (sin *Publish*).
+
+La primera configuración de Pages ya está hecha (Settings → Pages → Source: GitHub Actions; entorno `github-pages` con permiso para `main`).
 
 Netlify: entrá a https://app.netlify.com/drop y arrastrá la carpeta.
