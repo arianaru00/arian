@@ -17,7 +17,7 @@ Guía visual del sitio. Antes de agregar una sección, un componente o cambiar e
 | Bloques de proyecto con pestaña de carpeta | **Carpetas de color** por categoría de edición, streaming y producción (`.panel`) |
 | Cursores multiplayer con nombre | Cursores con los dos roles: "Editor de video" y "Streaming en vivo" |
 | Comentario de Figma | Tarjetas de cuentas de redes y comentario en Contacto |
-| Notas a mano ("about me!") | `.hand` en español: "sobre mí!", "mirá mi trabajo!" |
+| Notas a mano ("about me!") | `.hand` en itálica: "sobre mí!", "mirá mi trabajo!" |
 
 - **Tono:** lúdico y artesanal, pero ordenado. Se tiene que ver como el escritorio de alguien que edita, no como una plantilla.
 - **Densidad:** media-baja (4/10). Mucho aire entre secciones y bloques grandes.
@@ -66,24 +66,26 @@ Fondo claro, tinta casi negra y **cuatro colores de bloque** saturados. Es una e
 
 ## 3. Tipografía
 
+**Dos tipografías, de la misma familia.** Antes había cuatro (pixel Silkscreen y manuscrita Caveat incluidas); se sacaron para que el sitio se vea más sobrio y menos "videojuego".
+
 | Rol | Familia | Dónde |
 |---|---|---|
-| Display pixel | **Silkscreen** 700 | Nombre, títulos de sección (`.pixel-title`), valores de números, botón CONTACTO, iniciales |
-| Manuscrita | **Caveat** 600 | Notas sueltas (`.hand`): una por sección, como máximo |
-| Texto | **IBM Plex Sans** 400–700 | Párrafos, títulos de tarjeta, títulos de carpeta |
+| Display y texto | **IBM Plex Sans** 400–700 (+ itálica 400) | Nombre, títulos de sección (`.pixel-title`, el nombre de la clase quedó por historia), números, iniciales, botón Contacto, títulos de carpeta y tarjeta, párrafos. La itálica 400 es para las notas sueltas (`.hand`) |
 | Mono / UI | **IBM Plex Mono** 500–600 | Etiquetas, tags, botones, navegación, timecode (`.mono`, siempre en MAYÚSCULAS con tracking `0.08em`) |
 
 **Escala**
-- Nombre del hero: `clamp(2.1rem, 10.5vw, 6.6rem)`, en dos líneas.
-- `.pixel-title`: `clamp(2.4rem, 11vw, 5rem)`. La versión chica (`--sm`) es para secciones secundarias.
+- Nombre del hero: Plex Sans 700, `clamp(3.4rem, 16vw, 7rem)`, interletrado `-0.045em`. Ocupa dos líneas en el celular y una en escritorio.
+- Títulos de sección: Plex Sans 700, `clamp(2.4rem, 10vw, 4.6rem)`, interletrado `-0.04em`, en tipo oración (sin mayúsculas forzadas).
 - Título de carpeta: Plex Sans 600, `clamp(1.6rem, 6vw, 2.4rem)`.
 - Título de tarjeta: Plex Sans 600, `1.3rem`.
 - Texto: `1rem`, interlineado `1.6`, máximo **54–60 caracteres** por línea.
+- Notas (`.hand`): Plex Sans itálica 400, `1rem`, en `--ink-2`, en minúscula. Una por sección como máximo.
 - Mono: `0.62–0.8rem`. Nunca menos de `0.58rem` (los números de la regla).
 
 **Reglas**
-- La pixel **solo va en títulos cortos** (1–2 palabras). Nunca en párrafos, descripciones ni texto de más de ~16 caracteres por línea.
-- No mezclar dos display en la misma línea.
+- Los títulos grandes van en negrita con interletrado negativo; nunca en mayúsculas.
+- Las mayúsculas son exclusivas de la mono.
+- No sumar otra familia. Si hace falta contraste, se usa peso (400/600/700) o la mono.
 
 ---
 
@@ -118,10 +120,10 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
   - Arriba: media con `.cliptag` y, si hay, `.metric`.
   - Abajo: tipo (mono con punto magenta), título, cliente, descripción, tags (rol en tinta, formato en blanco) y link "Ver en YouTube ↗".
   - Las verticales (9:16) siempre van en fila: portada al 42% y datos al costado.
-- **Métrica** (`.metric`): sticker amarillo rotado −3° con el número en pixel. En tarjetas verticales del celular se ve solo el número (la palabra "reproducciones" queda para lectores de pantalla).
+- **Métrica** (`.metric`): sticker amarillo rotado −1.5° con el número en Plex Sans 700. En tarjetas verticales del celular se ve solo el número (la palabra "reproducciones" queda para lectores de pantalla).
 - **Lite embed**: miniatura de YouTube con un botón de play cuadrado blanco (amarillo en hover). El iframe de `youtube-nocookie` se carga recién al hacer clic.
 - **Reel de Instagram**: portada 9:16 local o de Sanity. Si no hay portada, se muestra un rayado diagonal con "9:16" y el nombre de la cuenta.
-- **Comentario / cuenta** (`.account`, `.comment`): blanco, borde fino, sombra suave (la única sombra difusa del sistema), avatar circular con iniciales en pixel y año en etiqueta negra.
+- **Comentario / cuenta** (`.account`, `.comment`): blanco, borde fino, sombra suave (la única sombra difusa del sistema), avatar circular con iniciales en Plex Sans 700 y año en etiqueta negra.
 - **Herramienta** (`.tool`): chip con un cuadrado de color e iniciales (OBS, RC, FF…). Sin barras de porcentaje, nunca.
 - **Nota** (`.note`): post-it manteca rotado −1.5° para el lead de cada sección.
 
@@ -131,7 +133,7 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 
 - Contenedor `max-width: 1200px` con un gutter de 16px.
 - Secciones con `padding: clamp(56px, 10vw, 104px) 0`.
-- **Cabecera de sección** centrada: nota a mano → `.pixel-title` → `.note`.
+- **Cabecera de sección** centrada: nota en itálica → título de sección (`.pixel-title`) → `.note`.
 - **Grilla** (cuentas de redes): 1 columna en el celular, 2 desde 640px y 3 desde 1000px.
 - **Piezas de video:** siempre en `.track` dentro de una carpeta, nunca en grilla suelta.
 - **Hero centrado.** Es una excepción deliberada, porque la referencia es simétrica. Los stickers flotan alrededor de la caja dentro de `.stage` (max 920px). Pueden pisar el borde de la caja, pero **nunca tapar texto**.
@@ -157,7 +159,7 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 | Arrastre (`[data-drag]`) | Con mouse, cualquier sticker o cursor del hero se agarra y queda donde lo soltás. En táctil está desactivado, para no trabar el scroll. |
 | Cursor "VOS" (`.you`) | Punto y etiqueta que siguen al mouse con un leve retraso (lerp 0.32). La etiqueta cambia según lo que hay debajo: **Play** (video), **Abrir** (reel), **Arrastrá**, **Cambiar** (interruptor) o **Clic**. El cursor del sistema **se sigue viendo**. Solo en dispositivos con mouse. |
 | Regla (`.ruler__hover`) | Línea cyan con el timecode de la posición del mouse (100 px = 10 s) |
-| `.pixel-title` y `.hero__title` | Al entrar en pantalla, las letras pasan de `--line` a tinta en secuencia (55 ms cada una), con un destello cyan de "selección" |
+| `.pixel-title` y `.hero__title` | Al entrar en pantalla, las letras pasan de `--line` a tinta en secuencia (55 ms cada una), con un fundido suave (sin destello) |
 | `#sobreMi` | Las palabras pasan de gris a tinta según el avance del scroll |
 | `[data-scroll-rot]` ("¿Qué onda?") | Arranca rotado −10° y se endereza al entrar |
 | Tarjetas, stats, chips, notas, polaroids, comentario, botón CONTACTO | Entran con un rebote (`translate` + `scale`, curva con overshoot), escalonadas 70 ms entre hermanos |
@@ -195,7 +197,7 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 ## 8. Contenido y tono
 
 - Español rioplatense, profesional y cercano, con frases cortas.
-- Las notas a mano son breves y en minúscula: "sobre mí!", "mirá mi trabajo!", "detrás de cámara".
+- Las notas sueltas (en itálica) son breves y en minúscula: "sobre mí!", "mirá mi trabajo!", "detrás de cámara".
 - Los stickers del hero dicen cosas verificables: dónde trabaja ahora, dónde trabajó y dónde vive.
 - Los números tienen que ser reales. "+290 mil" sí; "100%" o "+1000 clientes", no.
 - El contenido se edita en Sanity (https://arian-portfolio.sanity.studio/). El diseño se adapta solo a la cantidad de piezas.
@@ -205,7 +207,7 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 ## 9. No hacer
 
 - Emojis en la interfaz.
-- Usar la pixel en párrafos o en botones con texto largo.
+- Volver a sumar tipografías decorativas (pixel, manuscrita): el sistema es Plex Sans + Plex Mono.
 - Fondo blanco puro o texto `#000`.
 - Degradados de color, glow, neón o glassmorphism.
 - Bordes redondeados grandes en tarjetas de trabajo.
