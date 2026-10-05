@@ -17,7 +17,7 @@
     '"categorias": *[_type == "categoria"] | order(orden asc, title asc){_id, title, lado},' +
     '"proyectos": *[_type == "proyecto" && defined(url)] | order(orden asc, _createdAt asc){' +
       'title, cliente, seccion, "categoria": categoria._ref, rol, tipo, formato, plataforma, url, ' +
-      '"portada": portada.asset->url, metrica, descripcion, cta},' +
+      '"portada": portada.asset->url, portadaVideo, metrica, descripcion, cta},' +
     '"cuentas": *[_type == "cuenta"] | order(orden asc, desde asc){title, usuario, url, desde, destacado, tareas}' +
   '}';
 
@@ -34,6 +34,7 @@
       metrica: p.metrica || null,
       descripcion: p.descripcion || "",
       cta: p.cta || null,
+      portadaVideo: p.portadaVideo || null,
     };
   }
 

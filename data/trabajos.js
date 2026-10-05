@@ -344,6 +344,7 @@ window.PORTFOLIO = {
           titulo: "Perfil actoral", cliente: "Noelia Rufat · Representación actoral",
           rol: "Actor", tipo: "Book y créditos", formato: "horizontal", plataforma: "link",
           url: "https://www.noeliarufat.net/es/actor/arian-fazzari", cta: "Ver perfil actoral",
+          portadaVideo: "https://youtu.be/MGSVBPGQnsI", // miniatura del video; el clic va a la representante
           portada: null, metrica: null, descripcion: "Book, créditos y contacto para castings, a través de mi representante.",
         },
       ] },

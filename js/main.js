@@ -117,12 +117,15 @@
   function coverMedia(p) {
     var plat = PLATAFORMAS[p.plataforma] || PLATAFORMAS.link;
     var vertical = p.formato === "vertical";
+    // Portada subida, o la miniatura de un video de YouTube (el clic igual va al link)
+    var pv = !p.portada && parseYouTube(p.portadaVideo);
+    var cover = p.portada || (pv && pv.id ? "https://i.ytimg.com/vi/" + pv.id + "/hqdefault.jpg" : null);
     return (
       '<a class="reel" href="' + esc(p.url) + '" target="_blank" rel="noopener" aria-label="Ver ' +
         esc(p.titulo) + " en " + plat.nombre + ' (se abre en una pestaña nueva)">' +
         '<span class="reel__ph" aria-hidden="true"><span class="mono">' + (vertical ? "9:16" : "16:9") + "</span><span>" + esc(p.cliente) + "</span></span>" +
-        (p.portada
-          ? '<img src="' + esc(p.portada) + '" alt="Portada de ' + esc(p.titulo) + '" loading="lazy" decoding="async" width="' +
+        (cover
+          ? '<img src="' + esc(cover) + '" alt="Portada de ' + esc(p.titulo) + '" loading="lazy" decoding="async" width="' +
             (vertical ? "720\" height=\"1280" : "1280\" height=\"720") + '" onerror="this.remove()">'
           : "") +
         '<span class="reel__cta mono">' + esc(p.cta || "Ver en " + plat.nombre) + ' <span aria-hidden="true">↗</span></span>' +
