@@ -13,6 +13,8 @@
   var QUERY = '{' +
     '"ajustes": *[_type == "ajustes"] | order(_updatedAt desc)[0]{' +
       'sobreMi, showreel, numeros[]{valor, texto}, streamingIntro, streamingTareas, ' +
+      '"fotos": {"perfil": fotoPerfil.asset->url, "perfilHot": fotoPerfil.hotspot{x, y}, "perfilTexto": fotoPerfilTexto, ' +
+      '"setup": fotoSetup.asset->url, "setupHot": fotoSetup.hotspot{x, y}, "setupTexto": fotoSetupTexto}, ' +
       'delanteIntro, herramientas[]{nombre, uso}, contacto, "cv": cv.asset->url},' +
     '"categorias": *[_type == "categoria"] | order(orden asc, title asc){_id, title, lado},' +
     '"proyectos": *[_type == "proyecto" && defined(url)] | order(orden asc, _createdAt asc){' +
@@ -48,6 +50,7 @@
     var a = r.ajustes || {};
     if (hay(a.sobreMi)) D.sobreMi = a.sobreMi;
     if (hay(a.showreel)) D.showreel = a.showreel;
+    if (a.fotos && (a.fotos.perfil || a.fotos.setup || a.fotos.perfilTexto || a.fotos.setupTexto)) D.fotos = a.fotos;
     if (hay(a.numeros)) D.numeros = a.numeros;
     if (hay(a.herramientas)) D.herramientas = a.herramientas;
     if (a.contacto) {

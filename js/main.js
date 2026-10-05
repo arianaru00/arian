@@ -252,6 +252,22 @@
 
     $("#sobreMi").textContent = D.sobreMi || "";
 
+    // Polaroids de "Sobre mí": fotos y textos desde Sanity (Ajustes del sitio)
+    var fotos = D.fotos || {};
+    ["perfil", "setup"].forEach(function (k) {
+      var fig = document.querySelector('[data-foto="' + k + '"]');
+      if (!fig) return;
+      if (fotos[k + "Texto"]) fig.querySelector("figcaption").textContent = fotos[k + "Texto"];
+      if (!fotos[k]) return;
+      var hot = fotos[k + "Hot"], url = fotos[k] + "?w=600&h=600&fit=crop&auto=format" +
+        (hot ? "&crop=focalpoint&fp-x=" + hot.x + "&fp-y=" + hot.y : "");
+      var box = fig.querySelector(".polaroid__img"), old = box.querySelector("img");
+      var img = document.createElement("img");
+      img.src = url; img.alt = old ? old.alt : ""; img.width = 600; img.height = 600; img.loading = "lazy";
+      img.onerror = function () { img.remove(); };
+      if (old) old.replaceWith(img); else box.appendChild(img);
+    });
+
     // Números
     $("#numeros").innerHTML = (D.numeros || []).map(function (n, i) {
       return '<li class="stat stat--' + AVATAR_COLORS[i % AVATAR_COLORS.length] + '"><span class="stat__value">' + esc(n.valor) +
