@@ -749,3 +749,5 @@ svg { display: block; }
   transition: background 0.15s, transform 0.15s;
 }
 .sticker--rep:hover { background: var(--yellow); transform: rotate(0deg) translateY(-2px); }
+
+.showreel[hidden] { display: none; }

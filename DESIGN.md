@@ -131,6 +131,8 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 
 ## 5. Layout
 
+- **Showreel opcional:** si el campo *Showreel* de Sanity está vacío, el hero termina en los botones y "Ver trabajos" lleva directo a "Detrás de cámara". No hay placeholder.
+
 - Contenedor `max-width: 1200px` con un gutter de 16px.
 - Secciones con `padding: clamp(56px, 10vw, 104px) 0`.
 - **Cabecera de sección** centrada: nota en itálica → título de sección (`.pixel-title`) → `.note`.

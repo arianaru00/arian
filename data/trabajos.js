@@ -35,8 +35,7 @@ window.PORTFOLIO = {
     "Estudio la Licenciatura en Medios Audiovisuales (orientación guion) en la UNA. " +
     "Conduzco y produzco Patente Pendiente, mi propio streaming.",
 
-  // TODO: cuando tengas el showreel (60–90 s) subido a YouTube, pegá acá el link
-  // completo o solo el ID. Ej: "https://www.youtube.com/watch?v=XXXXXXXXXXX"
+  // Opcional: si algún día hay showreel, pegá acá el link de YouTube. Vacío = no se muestra.
   showreel: "",
 
   /* ------------------------------------------------- NÚMEROS DESTACADOS */

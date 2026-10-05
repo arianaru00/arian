@@ -44,6 +44,20 @@ python3 -m http.server 8080
 # abrir http://localhost:8080
 ```
 
+## Estadísticas
+
+Con [GoatCounter](https://www.goatcounter.com): gratis, sin cookies, sin cartel de consentimiento. La configuración está en `js/stats.js` (código `arianmartinez`).
+
+- **Panel:** https://arianmartinez.goatcounter.com
+- **Visitas:** páginas vistas, de dónde llega la gente (LinkedIn, WhatsApp, Google…), país y dispositivo.
+- **Eventos:**
+  - `play/…`: videos reproducidos.
+  - `salida/…`: links abiertos (reels, entradas, perfil actoral).
+  - `contacto/…`: clics en email, WhatsApp, LinkedIn y representación.
+  - `cv`: descargas del CV.
+  - `lado/delante` y `lado/detras`: cambios entre los dos lados de la cámara.
+- **Visitas propias:** no se cuentan las de tu compu (`localhost`). Para no contar tus visitas al sitio publicado, en el panel andá a *Settings → Ignore IPs*.
+
 ## Ramas y publicación
 
 | Rama | Para qué | ¿Se publica? |

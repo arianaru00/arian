@@ -242,18 +242,13 @@
   function render(D) {
     if (!D) return;
 
-    // Hero: showreel
+    // Hero: showreel opcional (si no hay link en Sanity, no se muestra nada y se va directo a los trabajos)
     var reel = parseYouTube(D.showreel);
-    $("#showreel").innerHTML =
-      '<div class="showreel__frame' + (reel ? "" : " showreel__frame--empty") + '">' +
-        (reel
-          ? liteYouTube(reel, "Showreel de Arian Martinez")
-          : '<div class="showreel__ph" role="img" aria-label="Espacio reservado para el showreel">' +
-              '<span class="showreel__label">Showreel</span>' +
-              '<span class="mono">60–90 s · próximamente</span>' +
-            "</div>") +
-        '<span class="cliptag mono" aria-hidden="true">' + PLAY_ICON + "SHOWREEL.MP4</span>" + HANDLES +
-      "</div>";
+    $("#showreel").hidden = !reel;
+    $("#showreel").innerHTML = reel
+      ? '<div class="showreel__frame">' + liteYouTube(reel, "Showreel de Arian Martinez") +
+          '<span class="cliptag mono" aria-hidden="true">' + PLAY_ICON + "SHOWREEL.MP4</span>" + HANDLES + "</div>"
+      : "";
 
     $("#sobreMi").textContent = D.sobreMi || "";
 
