@@ -17,7 +17,7 @@
     '"categorias": *[_type == "categoria"] | order(orden asc, title asc){_id, title, lado},' +
     '"proyectos": *[_type == "proyecto" && defined(url)] | order(orden asc, _createdAt asc){' +
       'title, cliente, seccion, "categoria": categoria._ref, rol, tipo, formato, plataforma, url, ' +
-      '"portada": portada.asset->url, metrica, descripcion},' +
+      '"portada": portada.asset->url, metrica, descripcion, cta},' +
     '"cuentas": *[_type == "cuenta"] | order(orden asc, desde asc){title, usuario, url, desde, destacado, tareas}' +
   '}';
 
@@ -33,6 +33,7 @@
       portada: p.portada ? p.portada + "?w=720&h=1280&fit=crop&auto=format" : null,
       metrica: p.metrica || null,
       descripcion: p.descripcion || "",
+      cta: p.cta || null,
     };
   }
 

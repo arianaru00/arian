@@ -717,3 +717,35 @@ svg { display: block; }
 /* La baldosa mide exactamente un período de raya en X e Y (92/sin55°, 92/cos55°), así no hay costura */
 .motion .contact-card { background-size: 112.31px 160.4px; animation: stripes 6s linear infinite; }
 @keyframes stripes { to { background-position: 112.3px 0; } }
+
+/* Playlist de YouTube (sin miniatura fija) */
+.lite__list {
+  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 6px; padding: 16px; text-align: center;
+  font: 700 clamp(1rem, 3vw, 1.4rem)/1.1 var(--f-pixel); text-transform: uppercase; color: var(--white);
+}
+.lite__list .mono { color: var(--cyan); font-family: var(--f-mono); font-size: 0.7rem; }
+.lite__list { padding-top: 40px; }
+
+/* Botón propio de la tarjeta ("Comprar entradas", "Ver perfil actoral") */
+.card__cta {
+  justify-self: start; display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 8px 14px;
+  background: var(--yellow); color: var(--ink); border: var(--border); box-shadow: 3px 3px 0 var(--ink); text-decoration: none;
+  font: 600 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.card__cta:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
+.lite--list .lite__play { display: none; }
+.lite__list-play svg {
+  width: 46px; height: 46px; padding: 10px; margin-top: 4px; background: var(--white); border: var(--border); box-shadow: var(--shadow);
+  fill: var(--ink); transition: background 0.12s, transform 0.12s;
+}
+.lite--list:hover .lite__list-play svg, .lite--list:focus-visible .lite__list-play svg { background: var(--yellow); transform: translate(-2px, -2px); }
+
+/* Link a la representación actoral (Delante de cámara) */
+#delanteRep:empty { display: none; }
+.sticker--rep {
+  display: inline-block; margin-top: 4px; text-decoration: none; background: var(--white);
+  font: 600 0.72rem var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; transform: rotate(1.5deg);
+  transition: background 0.15s, transform 0.15s;
+}
+.sticker--rep:hover { background: var(--yellow); transform: rotate(0deg) translateY(-2px); }

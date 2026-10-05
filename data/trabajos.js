@@ -321,20 +321,42 @@ window.PORTFOLIO = {
   // que arriba; plataforma puede ser "youtube", "instagram", "tiktok" o "link".
   // Las carpetas sin piezas se muestran como "en preparación".
   delante: {
-    intro:
-      "Conduzco Patente Pendiente, creo contenido para redes y trabajo como actor y artista. " +
-      "Lo que pasa del otro lado del lente.",
+    intro: "Conduzco y hago columnas, actúo, saco discos y dirijo teatro. Lo que pasa del otro lado del lente.",
     categorias: [
-      { id: "contenido", titulo: "Creación de contenido", piezas: [
-        // {
-        //   titulo: "TODO", cliente: "TODO", rol: "Creador de contenido", tipo: "Reel",
-        //   formato: "vertical", plataforma: "instagram", url: "https://www.instagram.com/reel/XXXX/",
-        //   portada: "assets/thumbs/contenido-1.jpg", metrica: null, descripcion: "TODO",
-        // },
+      { id: "conduccion", titulo: "Conducción", piezas: [
+        {
+          titulo: "Conductor y columnista", cliente: "TODO: nombre del programa / canal",
+          rol: "Conducción · Columna", tipo: "Programa en vivo", formato: "horizontal", plataforma: "youtube",
+          url: "https://www.youtube.com/watch?v=gHyM4SJ5MzQ&t=1825s", metrica: null,
+          descripcion: "TODO: una línea sobre el programa y tu columna.",
+        },
       ] },
-      { id: "conduccion", titulo: "Conducción", piezas: [] },  // TODO: Patente Pendiente (link a un programa)
-      { id: "actuacion", titulo: "Actuación", piezas: [] },    // TODO: reel de actuación, cortos, obras
-      { id: "arte", titulo: "Arte", piezas: [] },              // TODO: proyectos artísticos
+      { id: "teatro", titulo: "Teatro", piezas: [
+        {
+          titulo: "La Bestia, lo de adentro", cliente: "Obra de teatro · en cartel",
+          rol: "Dirección", tipo: "Obra de teatro", formato: "horizontal", plataforma: "link",
+          url: "https://www.alternativateatral.com/obra102931-la-bestia-lo-de-adentro", cta: "Comprar entradas",
+          portada: null, metrica: null, descripcion: "TODO: sala, días y horario de función.",
+        },
+      ] },
+      { id: "actuacion", titulo: "Actuación", piezas: [
+        {
+          titulo: "Perfil actoral", cliente: "Noelia Rufat · Representación actoral",
+          rol: "Actor", tipo: "Book y créditos", formato: "horizontal", plataforma: "link",
+          url: "https://www.noeliarufat.net/es/actor/arian-fazzari", cta: "Ver perfil actoral",
+          portada: null, metrica: null, descripcion: "Book, créditos y contacto para castings, a través de mi representante.",
+        },
+      ] },
+      { id: "musica", titulo: "Música", piezas: [
+        { titulo: "Un día cualquiera en el mundo", cliente: "Arian Fazzari", rol: "Música", tipo: "Disco", formato: "horizontal",
+          plataforma: "youtube", url: "https://www.youtube.com/watch?v=c51-8ecv3Ec", metrica: null, descripcion: "TODO: año y una línea sobre el disco." },
+        { titulo: "Íntimo", cliente: "Arian Fazzari", rol: "Música", tipo: "Disco", formato: "horizontal",
+          plataforma: "youtube", url: "https://www.youtube.com/watch?v=kSD5MCj9TOY", metrica: null, descripcion: "TODO: año y una línea sobre el disco." },
+        { titulo: "Tiempos violentos", cliente: "Arian Fazzari", rol: "Música", tipo: "Disco · playlist", formato: "horizontal",
+          plataforma: "youtube", url: "https://www.youtube.com/playlist?list=PL2U8SccHg2bZCbAg_7JpGv7KLzXLOYk39", metrica: null, descripcion: "TODO: año y una línea sobre el disco." },
+      ] },
+      { id: "arte", titulo: "Arte", piezas: [] },
+      { id: "contenido", titulo: "Creación de contenido", piezas: [] },
     ],
   },
 
@@ -356,6 +378,8 @@ window.PORTFOLIO = {
     linkedin: "https://www.linkedin.com/in/TODO/",      // TODO
     instagram: "https://www.instagram.com/TODO/",       // TODO
     instagramUsuario: "@TODO",                          // TODO
+    representacion: "https://www.noeliarufat.net/es/actor/arian-fazzari",
+    representacionNombre: "Noelia Rufat",
     cv: "assets/cv-arian-martinez.pdf",                 // TODO: subir el PDF con este nombre
   },
 };

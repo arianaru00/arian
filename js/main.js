@@ -34,6 +34,9 @@
     var u;
     try { u = new URL(input); } catch (e) { return null; }
     var id = null;
+    // Playlist (youtube.com/playlist?list=…): se embebe como lista completa
+    var list = u.searchParams.get("list");
+    if (u.pathname === "/playlist" && list && /^[\w-]+$/.test(list)) return { list: list, start: 0 };
     if (/youtu\.be$/.test(u.hostname)) {
       id = u.pathname.slice(1).split("/")[0];
     } else if (u.pathname === "/watch") {
@@ -47,6 +50,7 @@
   }
 
   function ytWatchUrl(yt) {
+    if (yt.list) return "https://www.youtube.com/playlist?list=" + yt.list;
     return "https://www.youtube.com/watch?v=" + yt.id + (yt.start ? "&t=" + yt.start + "s" : "");
   }
 
@@ -60,11 +64,15 @@
                 '<span class="h h--bl" aria-hidden="true"></span><span class="h h--br" aria-hidden="true"></span>';
 
   function liteYouTube(yt, title) {
-    var label = "Reproducir video: " + title + (yt.start ? " (desde " + fmtTime(yt.start) + ")" : "");
+    var label = (yt.list ? "Reproducir playlist: " : "Reproducir video: ") + title + (yt.start ? " (desde " + fmtTime(yt.start) + ")" : "");
     return (
-      '<button type="button" class="lite" data-yt="' + esc(yt.id) + '" data-start="' + yt.start +
+      '<button type="button" class="lite' + (yt.list ? " lite--list" : "") + '"' +
+        (yt.list ? ' data-list="' + esc(yt.list) + '"' : ' data-yt="' + esc(yt.id) + '"') + ' data-start="' + yt.start +
         '" data-title="' + esc(title) + '" aria-label="' + esc(label) + '">' +
-        '<img src="https://i.ytimg.com/vi/' + esc(yt.id) + '/hqdefault.jpg" alt="" loading="lazy" decoding="async" width="480" height="360" onerror="this.remove()">' +
+        (yt.list
+          // Una playlist no tiene miniatura fija: placeholder con el título
+          ? '<span class="lite__list" aria-hidden="true"><span class="mono">Playlist</span><span>' + esc(title) + '</span><span class="lite__list-play">' + PLAY_ICON + "</span></span>"
+          : '<img src="https://i.ytimg.com/vi/' + esc(yt.id) + '/hqdefault.jpg" alt="" loading="lazy" decoding="async" width="480" height="360" onerror="this.remove()">') +
         '<span class="lite__play">' + PLAY_ICON + "</span>" +
         (yt.start ? '<span class="lite__tc mono" aria-hidden="true">IN ' + fmtTime(yt.start) + "</span>" : "") +
       "</button>"
@@ -78,7 +86,9 @@
     var params = "autoplay=1&rel=0&modestbranding=1&playsinline=1";
     if (+btn.dataset.start) params += "&start=" + btn.dataset.start;
     var iframe = document.createElement("iframe");
-    iframe.src = "https://www.youtube-nocookie.com/embed/" + btn.dataset.yt + "?" + params;
+    iframe.src = btn.dataset.list
+      ? "https://www.youtube-nocookie.com/embed/videoseries?list=" + btn.dataset.list + "&" + params
+      : "https://www.youtube-nocookie.com/embed/" + btn.dataset.yt + "?" + params;
     iframe.title = btn.dataset.title;
     iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     iframe.allowFullscreen = true;
@@ -115,7 +125,7 @@
           ? '<img src="' + esc(p.portada) + '" alt="Portada de ' + esc(p.titulo) + '" loading="lazy" decoding="async" width="' +
             (vertical ? "720\" height=\"1280" : "1280\" height=\"720") + '" onerror="this.remove()">'
           : "") +
-        '<span class="reel__cta mono">Ver en ' + plat.nombre + ' <span aria-hidden="true">↗</span></span>' +
+        '<span class="reel__cta mono">' + esc(p.cta || "Ver en " + plat.nombre) + ' <span aria-hidden="true">↗</span></span>' +
       "</a>"
     );
   }
@@ -126,6 +136,9 @@
     var media, extLink = "";
     if (p.plataforma && p.plataforma !== "youtube") {
       media = coverMedia(p);
+      // Con texto de botón propio ("Comprar entradas"), también va un botón visible en la tarjeta
+      if (p.cta) extLink = '<a class="card__cta" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.cta) +
+        ' <span aria-hidden="true">↗</span><span class="sr-only"> (pestaña nueva)</span></a>';
     } else {
       var yt = parseYouTube(p.url);
       if (!yt) return "";
@@ -254,6 +267,11 @@
     // Delante de cámara: mismas carpetas; las vacías quedan "en preparación"
     var dl = D.delante || {};
     $("#delanteIntro").textContent = dl.intro || "";
+    var rep = (D.contacto || {}).representacion;
+    $("#delanteRep").innerHTML = rep
+      ? '<a class="sticker sticker--rep" href="' + esc(rep) + '" target="_blank" rel="noopener">Representación actoral: ' +
+        esc((D.contacto || {}).representacionNombre || "ver perfil") + ' <span aria-hidden="true">↗</span><span class="sr-only"> (pestaña nueva)</span></a>'
+      : "";
     renderStack("#delanteGrupos", "#delanteFiltros", dl.categorias || [], 3);
 
     // Streaming
@@ -297,6 +315,7 @@
       c.whatsapp && { label: "WhatsApp", value: c.whatsappVisible || c.whatsapp, href: "https://wa.me/" + String(c.whatsapp).replace(/\D/g, ""), ext: true },
       c.linkedin && { label: "LinkedIn", value: c.linkedin.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""), href: c.linkedin, ext: true },
       c.instagram && { label: "Instagram", value: c.instagramUsuario || c.instagram, href: c.instagram, ext: true },
+      c.representacion && { label: "Representación actoral", value: c.representacionNombre || "Ver perfil", href: c.representacion, ext: true },
     ].filter(Boolean);
     $("#contactoLista").innerHTML = items.map(function (it) {
       return (
