@@ -22,7 +22,7 @@ El contenido se edita en el Studio: **https://arian-portfolio.sanity.studio/** (
 - **Categoría de edición**: las pestañas de la sección Edición. Podés crear nuevas; el campo *Orden* define la posición.
 - **Delante de cámara**: creá el proyecto con *Sección* = "Delante de cámara" y elegí una categoría cuyo *Lado de la cámara* sea "Delante de cámara" (ya hay cuatro: Creación de contenido, Conducción, Actuación y Arte). La plataforma puede ser YouTube (se reproduce en el sitio), Instagram, TikTok u otro link; para las tres últimas, subí una portada. El texto de introducción se edita en *Ajustes del sitio*. Link directo: `…/#delante`.
 - **Cuenta de redes**: tarjetas de community management. Las cuentas opcionales (@lacosa_, @viajerafeminista, @arianfazzari) están como borrador: publicalas para que aparezcan.
-- **Ajustes del sitio** (uno solo): sobre mí, **las dos fotos de las polaroids** (perfil y setup, con su texto al pie; se recortan cuadradas según el punto de interés), números, herramientas, contacto, representación actoral y CV en PDF.
+- **Ajustes del sitio** (uno solo): sobre mí, **la foto de perfil** (polaroid de "Sobre mí", con su texto al pie; se recorta cuadrada según el punto de interés), números, herramientas, contacto, representación actoral y CV en PDF.
 
 El sitio muestra solo lo **publicado** (botón *Publish*). Los cambios aparecen en el sitio en menos de un minuto, sin volver a subir archivos.
 

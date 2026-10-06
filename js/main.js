@@ -242,19 +242,11 @@
   function render(D) {
     if (!D) return;
 
-    // Hero: showreel opcional (si no hay link en Sanity, no se muestra nada y se va directo a los trabajos)
-    var reel = parseYouTube(D.showreel);
-    $("#showreel").hidden = !reel;
-    $("#showreel").innerHTML = reel
-      ? '<div class="showreel__frame">' + liteYouTube(reel, "Showreel de Arian Martinez") +
-          '<span class="cliptag mono" aria-hidden="true">' + PLAY_ICON + "SHOWREEL.MP4</span>" + HANDLES + "</div>"
-      : "";
-
     $("#sobreMi").textContent = D.sobreMi || "";
 
     // Polaroids de "Sobre mí": fotos y textos desde Sanity (Ajustes del sitio)
     var fotos = D.fotos || {};
-    ["perfil", "setup"].forEach(function (k) {
+    ["perfil"].forEach(function (k) {
       var fig = document.querySelector('[data-foto="' + k + '"]');
       if (!fig) return;
       if (fotos[k + "Texto"]) fig.querySelector("figcaption").textContent = fotos[k + "Texto"];

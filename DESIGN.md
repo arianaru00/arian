@@ -13,7 +13,7 @@ Guía visual del sitio. Antes de agregar una sección, un componente o cambiar e
 | Regla de píxeles arriba y abajo | **Regla de timecode** (`00:00`, `00:10`…) con un **cabezal de reproducción** magenta que avanza con el scroll |
 | Reloj `8:01:17 PM` | **Timecode en vivo** `TC HH:MM:SS:FF` a 25 fps |
 | Caja de selección con manijas sobre el nombre | Igual (`.selbox` + `.h`): el nombre es el "clip seleccionado" |
-| `IMAGE.JPG` sobre cada imagen | `CLIP_01.MP4` / `REEL_01.MP4` / `SHOWREEL.MP4` (`.cliptag`) |
+| `IMAGE.JPG` sobre cada imagen | `CLIP_01.MP4` / `REEL_01.MP4` (`.cliptag`) |
 | Bloques de proyecto con pestaña de carpeta | **Carpetas de color** por categoría de edición, streaming y producción (`.panel`) |
 | Cursores multiplayer con nombre | Cursores con los dos roles: "Editor de video" y "Streaming en vivo" |
 | Comentario de Figma | Tarjetas de cuentas de redes y comentario en Contacto |
@@ -47,7 +47,7 @@ Fondo claro, tinta casi negra y **cuatro colores de bloque** saturados. Es una e
 | `--yellow` | `#f0b429` | `--ink` | Carpeta 3, métricas, cursor "Editor de video" |
 | `--magenta` | `#d6245c` | `--white` | Carpeta 4, cabezal de la regla, "on air" |
 | `--green` | `#2fb36d` | `--ink` | Carpeta Producción, blob, "disponible" |
-| `--ink` (bloque) | `#16161a` | `--white` | Carpeta 2, carpeta En vivo, showreel |
+| `--ink` (bloque) | `#16161a` | `--white` | Carpeta 2, carpeta En vivo |
 | `--brown` | `#6e3b1c` | — | Solo en el rayado de la tarjeta de contacto |
 
 ### Stickers y sistema
@@ -131,7 +131,7 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 
 ## 5. Layout
 
-- **Showreel opcional:** si el campo *Showreel* de Sanity está vacío, el hero termina en los botones y "Ver trabajos" lleva directo a "Detrás de cámara". No hay placeholder.
+- **Sin showreel:** el hero termina en los botones y "Ver trabajos" lleva directo a "Detrás de cámara". "Sobre mí" lleva una sola polaroid (foto de perfil desde Sanity).
 
 - Contenedor `max-width: 1200px` con un gutter de 16px.
 - Secciones con `padding: clamp(56px, 10vw, 104px) 0`.

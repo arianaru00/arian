@@ -218,7 +218,7 @@
   }
 
   /* ------------------------------------------- Aparición al entrar */
-  var REVEAL = ".card, .account, .stat, .skill, .tool, .note, .polaroid, .tagbox, .comment, .bigbtn, .contact-sheet, .side-switch, .section__head .sticker, .showreel";
+  var REVEAL = ".card, .account, .stat, .skill, .tool, .note, .polaroid, .tagbox, .comment, .bigbtn, .contact-sheet, .side-switch, .section__head .sticker";
   var io = "IntersectionObserver" in window ? new IntersectionObserver(function (es) {
     es.forEach(function (e) {
       if (!e.isIntersecting) return;
