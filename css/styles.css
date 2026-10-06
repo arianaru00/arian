@@ -456,6 +456,8 @@ svg { display: block; }
 .lite:hover .lite__play svg, .lite:focus-visible .lite__play svg { background: var(--yellow); transform: translate(-2px, -2px); }
 .lite__tc { position: absolute; left: 10px; top: 10px; padding: 3px 7px; background: var(--white); color: var(--ink); border: 1.5px solid var(--ink); font-size: 0.62rem; }
 .lite__frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.vfile { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: var(--ink); }
+.card__media:has(.vfile) .metric { bottom: auto; top: 10px; } /* que no tape los controles */
 
 /* Reels de Instagram */
 .reel { position: absolute; inset: 0; display: block; text-decoration: none; color: var(--ink); }

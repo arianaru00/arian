@@ -63,13 +63,15 @@
   var HANDLES = '<span class="h h--tl" aria-hidden="true"></span><span class="h h--tr" aria-hidden="true"></span>' +
                 '<span class="h h--bl" aria-hidden="true"></span><span class="h h--br" aria-hidden="true"></span>';
 
-  function liteYouTube(yt, title) {
+  function liteYouTube(yt, title, portada) {
     var label = (yt.list ? "Reproducir playlist: " : "Reproducir video: ") + title + (yt.start ? " (desde " + fmtTime(yt.start) + ")" : "");
     return (
-      '<button type="button" class="lite' + (yt.list ? " lite--list" : "") + '"' +
+      '<button type="button" class="lite' + (yt.list && !portada ? " lite--list" : "") + '"' +
         (yt.list ? ' data-list="' + esc(yt.list) + '"' : ' data-yt="' + esc(yt.id) + '"') + ' data-start="' + yt.start +
         '" data-title="' + esc(title) + '" aria-label="' + esc(label) + '">' +
-        (yt.list
+        (portada
+          ? '<img src="' + esc(portada) + '" alt="" loading="lazy" decoding="async" width="1280" height="720" onerror="this.remove()">'
+          : yt.list
           // Una playlist no tiene miniatura fija: placeholder con el título
           ? '<span class="lite__list" aria-hidden="true"><span class="mono">Playlist</span><span>' + esc(title) + '</span><span class="lite__list-play">' + PLAY_ICON + "</span></span>"
           : '<img src="https://i.ytimg.com/vi/' + esc(yt.id) + '/hqdefault.jpg" alt="" loading="lazy" decoding="async" width="480" height="360" onerror="this.remove()">') +
@@ -133,11 +135,21 @@
     );
   }
 
+  // Video subido a Sanity: se reproduce acá mismo, sin cargar nada hasta el play
+  function fileVideo(p) {
+    return '<video class="vfile" controls playsinline preload="none"' + (p.portada ? ' poster="' + esc(p.portada) + '"' : "") +
+      ' aria-label="' + esc(p.titulo) + '"><source src="' + esc(p.video) + '"></video>';
+  }
+
   function workCard(p, lvl) {
     var h = "h" + (lvl || 3);
     var vertical = p.formato === "vertical";
     var media, extLink = "";
-    if (p.plataforma && p.plataforma !== "youtube") {
+    if (p.video) {
+      media = fileVideo(p);
+      if (p.url) extLink = '<a class="card__cta" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.cta || "Ver más") +
+        ' <span aria-hidden="true">↗</span><span class="sr-only"> (pestaña nueva)</span></a>';
+    } else if (p.plataforma && p.plataforma !== "youtube") {
       media = coverMedia(p);
       // Con texto de botón propio ("Comprar entradas"), también va un botón visible en la tarjeta
       if (p.cta) extLink = '<a class="card__cta" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.cta) +
@@ -145,11 +157,12 @@
     } else {
       var yt = parseYouTube(p.url);
       if (!yt) return "";
-      media = liteYouTube(yt, p.titulo);
+      media = liteYouTube(yt, p.titulo, p.portada);
       extLink = '<a class="card__ext mono" href="' + ytWatchUrl(yt) + '" target="_blank" rel="noopener">Ver en YouTube<span class="sr-only"> (pestaña nueva)</span> <span aria-hidden="true">↗</span></a>';
     }
     clipCount++;
-    var clip = (PLATAFORMAS[p.plataforma] || PLATAFORMAS.youtube).clip + pad(clipCount) + (p.plataforma === "link" ? "" : ".MP4");
+    var clip = (p.video ? "CLIP_" : (PLATAFORMAS[p.plataforma] || PLATAFORMAS.youtube).clip) + pad(clipCount) +
+      (p.plataforma === "link" && !p.video ? "" : ".MP4");
     return (
       '<article class="card ' + (vertical ? "card--v" : "card--h") + '">' +
         '<div class="card__media">' + media +
@@ -169,7 +182,7 @@
     );
   }
 
-  function visible(list) { return (list || []).filter(function (p) { return p && p.url; }); }
+  function visible(list) { return (list || []).filter(function (p) { return p && (p.url || p.video); }); }
 
   var PANEL_COLORS = ["cyan", "ink", "yellow", "magenta"];
   var AVATAR_COLORS = ["cyan", "yellow", "magenta", "green"];

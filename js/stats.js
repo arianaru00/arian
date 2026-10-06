@@ -3,7 +3,7 @@
    Panel: https://<CODIGO>.goatcounter.com  (el código es el de abajo).
 
    Además de las visitas, registra como "eventos":
-   - play/…      videos de YouTube que se reproducen en el sitio
+   - play/…      videos (YouTube o subidos a Sanity) que se reproducen en el sitio
    - salida/…    links que se abren (Instagram, entradas, perfil actoral, YouTube…)
    - contacto/…  clics en email, WhatsApp, LinkedIn, Instagram, representación
    - cv          descargas del CV
@@ -61,5 +61,14 @@
       var name = cardTitle(el) || el.textContent.trim();
       return track("salida/" + slug(name), "Salida: " + name);
     }
+  }, true);
+
+  // Videos subidos a Sanity: el evento "play" no burbujea, se escucha en captura
+  document.addEventListener("play", function (ev) {
+    var v = ev.target;
+    if (!v.classList || !v.classList.contains("vfile") || v.dataset.counted) return;
+    v.dataset.counted = "1";
+    var title = v.getAttribute("aria-label") || cardTitle(v);
+    track("play/" + slug(title), "Play: " + title);
   }, true);
 })();

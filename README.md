@@ -18,9 +18,19 @@ assets/fotos/         polaroids de "Sobre mí": arian.jpg y setup.jpg
 
 El contenido se edita en el Studio: **https://arian-portfolio.sanity.studio/** (proyecto Sanity "Arian", `jdyfiba6`, dataset `production`).
 
-- **Proyecto**: cada pieza. Elegí la *Sección* (Edición / Streaming / Producción) y, si es Edición, la *Categoría*. Pegá el link, completá rol, formato, reproducciones y descripción. En Instagram subí la portada vertical.
-- **Categoría de edición**: las pestañas de la sección Edición. Podés crear nuevas; el campo *Orden* define la posición.
-- **Delante de cámara**: creá el proyecto con *Sección* = "Delante de cámara" y elegí una categoría cuyo *Lado de la cámara* sea "Delante de cámara" (ya hay cuatro: Creación de contenido, Conducción, Actuación y Arte). La plataforma puede ser YouTube (se reproduce en el sitio), Instagram, TikTok u otro link; para las tres últimas, subí una portada. El texto de introducción se edita en *Ajustes del sitio*. Link directo: `…/#delante`.
+El Studio está dividido en dos lados que no se mezclan:
+
+- **Detrás de cámara · Trabajos**: cada pieza laboral. Elegí la *Sección* (Edición / Streaming / Producción) y, si es Edición, la *Carpeta*.
+- **Detrás de cámara · Carpetas**: las pestañas de Edición (Redes / vertical, Institucional y viajes…). El campo *Orden* define la posición.
+- **Detrás de cámara · Cuentas de redes**: las cuentas que manejás.
+- **Delante de cámara · Proyectos** y **Delante de cámara · Carpetas**: lo artístico (Conducción, Teatro, Actuación, Música, Arte, Creación de contenido). El texto de introducción se edita en *Ajustes del sitio*. Link directo: `…/#delante`.
+
+En cada trabajo o proyecto:
+
+- **Link**: YouTube (video o playlist; se reproduce en el sitio), Instagram, TikTok u otra web.
+- **Subir video**: si el video no está en ninguna red, subilo directo (mp4, idealmente menos de 50 MB). Se reproduce en el sitio y el link pasa a ser opcional.
+- **Portada (foto)**: sirve para todo (reels, obras, links, videos subidos). En YouTube reemplaza la miniatura automática. Con el punto de foco elegís qué parte de la foto se ve.
+- **Sumar otro a una carpeta** (ej. un 3er institucional): creá un trabajo nuevo y elegí esa carpeta. Atajo: abrí uno parecido → menú `⋯` arriba a la derecha → *Duplicate*, y cambiá título y link.
 - **Cuenta de redes**: tarjetas de community management. Las cuentas opcionales (@lacosa_, @viajerafeminista, @arianfazzari) están como borrador: publicalas para que aparezcan.
 - **Ajustes del sitio** (uno solo): sobre mí, **la foto de perfil** (polaroid de "Sobre mí", con su texto al pie; se recorta cuadrada según el punto de interés), números, herramientas, contacto, representación actoral y CV en PDF.
 

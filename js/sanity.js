@@ -15,10 +15,13 @@
       'sobreMi, numeros[]{valor, texto}, streamingIntro, streamingTareas, ' +
       '"fotos": {"perfil": fotoPerfil.asset->url, "perfilHot": fotoPerfil.hotspot{x, y}, "perfilTexto": fotoPerfilTexto}, ' +
       'delanteIntro, herramientas[]{nombre, uso}, contacto, "cv": cv.asset->url},' +
-    '"categorias": *[_type == "categoria"] | order(orden asc, title asc){_id, title, lado},' +
-    '"proyectos": *[_type == "proyecto" && defined(url)] | order(orden asc, _createdAt asc){' +
-      'title, cliente, seccion, "categoria": categoria._ref, rol, tipo, formato, plataforma, url, ' +
-      '"portada": portada.asset->url, portadaVideo, metrica, descripcion, cta},' +
+    '"categorias": *[_type == "categoria" && lado != "delante"] | order(orden asc, title asc){_id, title, "lado": "detras"},' +
+    '"categoriasDelante": *[_type == "categoriaDelante"] | order(orden asc, title asc){_id, title, "lado": "delante"},' +
+    '"proyectos": *[(_type == "proyecto" && seccion != "delante") || _type == "proyectoDelante"]' +
+      '[defined(url) || defined(video.asset)] | order(orden asc, _createdAt asc){' +
+      'title, cliente, "seccion": select(_type == "proyectoDelante" => "delante", seccion), "categoria": categoria._ref, ' +
+      'rol, tipo, formato, plataforma, url, "video": video.asset->url, ' +
+      '"portada": portada.asset->url, "portadaHot": portada.hotspot{x, y}, portadaVideo, metrica, descripcion, cta},' +
     '"cuentas": *[_type == "cuenta"] | order(orden asc, desde asc){title, usuario, url, desde, destacado, tareas}' +
   '}';
 
@@ -31,7 +34,9 @@
       formato: p.formato === "vertical" ? "vertical" : "horizontal",
       plataforma: ["instagram", "tiktok", "link"].indexOf(p.plataforma) >= 0 ? p.plataforma : "youtube",
       url: p.url,
-      portada: p.portada ? p.portada + "?w=720&h=1280&fit=crop&auto=format" : null,
+      portada: p.portada ? p.portada + (p.formato === "vertical" ? "?w=720&h=1280" : "?w=1280&h=720") + "&fit=crop&auto=format" +
+        (p.portadaHot ? "&crop=focalpoint&fp-x=" + p.portadaHot.x + "&fp-y=" + p.portadaHot.y : "") : null,
+      video: p.video || null,
       metrica: p.metrica || null,
       descripcion: p.descripcion || "",
       cta: p.cta || null,
@@ -57,7 +62,7 @@
     }
 
     var proyectos = r.proyectos || [];
-    var cats = r.categorias || [];
+    var cats = (r.categorias || []).concat(r.categoriasDelante || []);
 
     // Arma las carpetas de un lado de la cámara: una por categoría + "Otros" para lo que no tiene
     function carpetas(lado, seccion, otros) {
