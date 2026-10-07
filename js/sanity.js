@@ -14,7 +14,7 @@
     '"ajustes": *[_type == "ajustes"] | order(_updatedAt desc)[0]{' +
       'sobreMi, numeros[]{valor, texto}, streamingIntro, streamingTareas, ' +
       '"fotos": {"perfil": fotoPerfil.asset->url, "perfilHot": fotoPerfil.hotspot{x, y}, "perfilTexto": fotoPerfilTexto}, ' +
-      'delanteIntro, herramientas[]{nombre, uso}, contacto, "cv": cv.asset->url},' +
+      'delanteIntro, herramientas[]{nombre, uso, "logo": logo.asset->url + "?w=96&h=96&fit=crop&auto=format"}, contacto, "cv": cv.asset->url},' +
     '"categorias": *[_type == "categoria" && lado != "delante"] | order(orden asc, title asc){_id, title, "lado": "detras"},' +
     '"categoriasDelante": *[_type == "categoriaDelante"] | order(orden asc, title asc){_id, title, "lado": "delante"},' +
     '"proyectos": *[(_type == "proyecto" && seccion != "delante") || _type == "proyectoDelante"]' +

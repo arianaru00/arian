@@ -187,6 +187,16 @@
   var PANEL_COLORS = ["cyan", "ink", "yellow", "magenta"];
   var AVATAR_COLORS = ["cyan", "yellow", "magenta", "green"];
 
+  // Logos reales de las herramientas más comunes (assets/logos). En Sanity se puede subir uno propio.
+  var LOGOS = [
+    [/premiere/i, "premiere.svg"], [/\bobs\b/i, "obs.svg"], [/capcut/i, "capcut.jpg"], [/canva/i, "canva.jpg"],
+    [/vmix/i, "vmix.svg"], [/ableton/i, "ableton.png"], [/ffmpeg/i, "ffmpeg.svg"],
+  ];
+  function logoDe(nombre) {
+    for (var i = 0; i < LOGOS.length; i++) if (LOGOS[i][0].test(nombre || "")) return "assets/logos/" + LOGOS[i][1];
+    return null;
+  }
+
   // "OBS Studio" → OBS · "RodeCaster II Pro" → RC · "Walter Rippel" → WR · "ffmpeg" → FF
   function initials(name) {
     var parts = String(name).replace(/[^\wÀ-ÿ ]/g, " ").trim().split(/\s+/), w = parts[0] || "";
@@ -322,8 +332,11 @@
 
     // Herramientas
     $("#herramientasLista").innerHTML = (D.herramientas || []).map(function (h, i) {
-      return '<li class="tool"><span class="tool__ico tool__ico--' + AVATAR_COLORS[i % AVATAR_COLORS.length] + '" aria-hidden="true">' +
-        esc(initials(h.nombre)) + '</span><span class="tool__txt"><span class="tool__name">' + esc(h.nombre) +
+      var logo = h.logo || logoDe(h.nombre);
+      return '<li class="tool">' + (logo
+        ? '<span class="tool__ico tool__ico--logo" aria-hidden="true"><img src="' + esc(logo) + '" alt="" width="42" height="42" loading="lazy" decoding="async"></span>'
+        : '<span class="tool__ico tool__ico--' + AVATAR_COLORS[i % AVATAR_COLORS.length] + '" aria-hidden="true">' + esc(initials(h.nombre)) + "</span>") +
+        '<span<span class="tool__txt"><span class="tool__name">' + esc(h.nombre) +
         '</span><span class="tool__use mono">' + esc(h.uso) + "</span></span></li>";
     }).join("");
 

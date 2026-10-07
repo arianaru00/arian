@@ -513,6 +513,8 @@ svg { display: block; }
 .tool__ico--yellow { background: var(--yellow); }
 .tool__ico--magenta { background: var(--magenta); color: var(--white); }
 .tool__ico--green { background: var(--green); }
+.tool__ico--logo { overflow: hidden; background: var(--white); }
+.tool__ico--logo img { width: 100%; height: 100%; object-fit: cover; }
 .tool__txt { display: grid; }
 .tool__name { font-weight: 600; line-height: 1.25; }
 .tool__use { color: var(--ink-2); font-size: 0.62rem; }
