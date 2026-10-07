@@ -314,7 +314,7 @@ window.PORTFOLIO = {
   ],
 
   /* --------------------------------------------- DELANTE DE CÁMARA */
-  // Creación de contenido, conducción, actuación, arte. Mismo formato de pieza
+  // Creación de contenido, conducción, actuación, música, teatro. Mismo formato de pieza
   // que arriba; plataforma puede ser "youtube", "instagram", "tiktok" o "link".
   // Las carpetas sin piezas se muestran como "en preparación".
   delante: {
@@ -353,7 +353,6 @@ window.PORTFOLIO = {
         { titulo: "Tiempos violentos", cliente: "Arian Fazzari", rol: "Música", tipo: "Disco · playlist", formato: "horizontal",
           plataforma: "youtube", url: "https://www.youtube.com/playlist?list=PL2U8SccHg2bZCbAg_7JpGv7KLzXLOYk39", metrica: null, descripcion: "TODO: año y una línea sobre el disco." },
       ] },
-      { id: "arte", titulo: "Arte", piezas: [] },
       { id: "contenido", titulo: "Creación de contenido", piezas: [] },
     ],
   },

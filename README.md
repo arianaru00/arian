@@ -23,7 +23,7 @@ El Studio está dividido en dos lados que no se mezclan:
 - **Detrás de cámara · Trabajos**: cada pieza laboral. Elegí la *Sección* (Edición / Streaming / Producción) y, si es Edición, la *Carpeta*.
 - **Detrás de cámara · Carpetas**: las pestañas de Edición (Redes / vertical, Institucional y viajes…). El campo *Orden* define la posición.
 - **Detrás de cámara · Cuentas de redes**: las cuentas que manejás.
-- **Delante de cámara · Proyectos** y **Delante de cámara · Carpetas**: lo artístico (Conducción, Teatro, Actuación, Música, Arte, Creación de contenido). El texto de introducción se edita en *Ajustes del sitio*. Link directo: `…/#delante`.
+- **Delante de cámara · Proyectos** y **Delante de cámara · Carpetas**: lo artístico (Conducción, Teatro, Actuación, Música, Creación de contenido). El texto de introducción se edita en *Ajustes del sitio*. Link directo: `…/#delante`.
 
 En cada trabajo o proyecto:
 

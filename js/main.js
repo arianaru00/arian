@@ -476,7 +476,7 @@
   });
 
   /* ------------------------------------------------ Lado de la cámara */
-  // Dos paneles: "detrás" (edición, vivo, producción…) y "delante" (contenido, actuación, arte).
+  // Dos paneles: "detrás" (edición, vivo, producción…) y "delante" (contenido, actuación, música…).
   // El link #delante abre directamente ese lado.
   var sideTabs = { detras: $("#tab-detras"), delante: $("#tab-delante") };
   var STATUS = { detras: "Edit · lo que hago detrás de cámara", delante: "Rec · lo que hago delante de cámara" };
