@@ -135,6 +135,32 @@
     );
   }
 
+  // Reel o post de Instagram sin portada: el reproductor oficial de Instagram, recortado al 9:16
+  // (se esconde el encabezado con el usuario). Se escala con fitInstagram() porque Instagram no baja de 326 px.
+  function igCode(url) {
+    var m = /instagram\.com\/(?:[\w.]+\/)?(p|reels?|tv)\/([\w-]+)/.exec(url || "");
+    return m ? { tipo: m[1] === "p" ? "p" : "reel", code: m[2] } : null;
+  }
+  function igEmbed(p) {
+    var ig = igCode(p.url);
+    return '<div class="igwrap"><iframe class="igwrap__frame" src="https://www.instagram.com/' + ig.tipo + "/" + esc(ig.code) +
+      '/embed/" title="' + esc(p.titulo) + ' en Instagram" loading="lazy" scrolling="no" allowtransparency="true"' +
+      ' allow="autoplay; encrypted-media; picture-in-picture"></iframe></div>';
+  }
+  var IG_MIN = 326, IG_HEAD = 54; // ancho mínimo del reproductor y alto del encabezado que se recorta
+  function fitInstagram(root) {
+    (root || document).querySelectorAll(".igwrap").forEach(function (w) {
+      var cw = w.clientWidth, ch = w.clientHeight;
+      if (!cw) return; // pestaña oculta
+      var fw = Math.max(IG_MIN, cw), s = cw / fw, f = w.firstElementChild;
+      f.style.width = fw + "px";
+      f.style.height = Math.ceil(ch / s + IG_HEAD + 320) + "px";
+      f.style.transform = "translateY(" + (-IG_HEAD * s) + "px) scale(" + s + ")";
+    });
+  }
+  var igRt;
+  addEventListener("resize", function () { clearTimeout(igRt); igRt = setTimeout(fitInstagram, 120); });
+
   // Video subido a Sanity: se reproduce acá mismo, sin cargar nada hasta el play
   function fileVideo(p) {
     return '<video class="vfile" controls playsinline preload="none"' + (p.portada ? ' poster="' + esc(p.portada) + '"' : "") +
@@ -149,6 +175,9 @@
       media = fileVideo(p);
       if (p.url) extLink = '<a class="card__cta" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.cta || "Ver más") +
         ' <span aria-hidden="true">↗</span><span class="sr-only"> (pestaña nueva)</span></a>';
+    } else if (p.plataforma === "instagram" && !p.portada && !p.portadaVideo && igCode(p.url)) {
+      media = igEmbed(p);
+      extLink = '<a class="card__ext mono" href="' + esc(p.url) + '" target="_blank" rel="noopener">Ver en Instagram<span class="sr-only"> (pestaña nueva)</span> <span aria-hidden="true">↗</span></a>';
     } else if (p.plataforma && p.plataforma !== "youtube") {
       media = coverMedia(p);
       // Con texto de botón propio ("Comprar entradas"), también va un botón visible en la tarjeta
@@ -370,6 +399,7 @@
     // Aviso para js/motion.js (animaciones que dependen del contenido)
     window.__portfolioRendered = true;
     buildIndice();
+    fitInstagram();
     document.dispatchEvent(new CustomEvent("portfolio:render"));
 
     // Aviso TODO (solo consola)
@@ -504,6 +534,7 @@
     if (opts.hash !== false && history.replaceState) history.replaceState(null, "", "#" + side);
     layoutStack();
     updateIndice();
+    fitInstagram();
     dispatchEvent(new Event("resize")); // recalcula flechas de las tiras del panel que apareció
   }
 
