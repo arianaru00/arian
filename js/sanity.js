@@ -37,6 +37,7 @@
       portada: p.portada ? p.portada + (p.formato === "vertical" ? "?w=720&h=1280" : "?w=1280&h=720") + "&fit=crop&auto=format" +
         (p.portadaHot ? "&crop=focalpoint&fp-x=" + p.portadaHot.x + "&fp-y=" + p.portadaHot.y : "") : null,
       video: p.video || null,
+      seccion: p.seccion || null,
       metrica: p.metrica || null,
       descripcion: p.descripcion || "",
       cta: p.cta || null,
@@ -96,6 +97,7 @@
         piezas: proyectos.filter(function (p) { return p.seccion === "streaming"; }).map(pieza),
       };
       D.produccion = proyectos.filter(function (p) { return p.seccion === "produccion"; }).map(pieza);
+      D.web = proyectos.filter(function (p) { return p.seccion === "web"; }).map(pieza);
     }
 
     if (hay(r.cuentas)) {

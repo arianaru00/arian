@@ -161,6 +161,19 @@
   var igRt;
   addEventListener("resize", function () { clearTimeout(igRt); igRt = setTimeout(fitInstagram, 120); });
 
+  // Sitio web: marco de navegador con la captura (si se subió) o el nombre del sitio
+  function dominio(url) { return String(url || "").replace(/^https?:\/\/(www\.)?/, "").replace(/\/.*$/, ""); }
+  function browserMedia(p) {
+    return '<a class="browser" href="' + esc(p.url) + '" target="_blank" rel="noopener" aria-label="Visitar ' + esc(p.titulo) + ' (pestaña nueva)">' +
+      '<span class="browser__bar" aria-hidden="true"><span class="browser__dots"><i></i><i></i><i></i></span>' +
+        '<span class="browser__url mono">' + esc(dominio(p.url)) + "</span></span>" +
+      '<span class="browser__view">' + (p.portada
+        ? '<img src="' + esc(p.portada) + '" alt="Captura de ' + esc(p.titulo) + '" loading="lazy" decoding="async" width="1280" height="720" onerror="this.remove()">'
+        : "") +
+        '<span class="browser__ph" aria-hidden="true"><span class="browser__name">' + esc(p.titulo) + '</span><span class="mono">' + esc(dominio(p.url)) + "</span></span>" +
+      "</span></a>";
+  }
+
   // Video subido a Sanity: se reproduce acá mismo, sin cargar nada hasta el play
   function fileVideo(p) {
     return '<video class="vfile" controls playsinline preload="none"' + (p.portada ? ' poster="' + esc(p.portada) + '"' : "") +
@@ -171,7 +184,11 @@
     var h = "h" + (lvl || 3);
     var vertical = p.formato === "vertical";
     var media, extLink = "";
-    if (p.video) {
+    if (p.seccion === "web") {
+      media = browserMedia(p);
+      extLink = '<a class="card__cta" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.cta || "Visitar sitio") +
+        ' <span aria-hidden="true">↗</span><span class="sr-only"> (pestaña nueva)</span></a>';
+    } else if (p.video) {
       media = fileVideo(p);
       if (p.url) extLink = '<a class="card__cta" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.cta || "Ver más") +
         ' <span aria-hidden="true">↗</span><span class="sr-only"> (pestaña nueva)</span></a>';
@@ -190,12 +207,12 @@
       extLink = '<a class="card__ext mono" href="' + ytWatchUrl(yt) + '" target="_blank" rel="noopener">Ver en YouTube<span class="sr-only"> (pestaña nueva)</span> <span aria-hidden="true">↗</span></a>';
     }
     clipCount++;
-    var clip = (p.video ? "CLIP_" : (PLATAFORMAS[p.plataforma] || PLATAFORMAS.youtube).clip) + pad(clipCount) +
-      (p.plataforma === "link" && !p.video ? "" : ".MP4");
+    var clip = p.seccion === "web" ? "WEB_" + pad(clipCount) : ((p.video ? "CLIP_" : (PLATAFORMAS[p.plataforma] || PLATAFORMAS.youtube).clip) + pad(clipCount) +
+      (p.plataforma === "link" && !p.video ? "" : ".MP4"));
     return (
       '<article class="card ' + (vertical ? "card--v" : "card--h") + '">' +
         '<div class="card__media">' + media +
-          '<span class="cliptag mono" aria-hidden="true">' + PLAY_ICON + clip + "</span>" +
+          (p.seccion === "web" ? "" : '<span class="cliptag mono" aria-hidden="true">' + PLAY_ICON + clip + "</span>") +
           metricBadge(p.metrica) + HANDLES +
         "</div>" +
         '<div class="card__body">' +
@@ -204,7 +221,7 @@
           '<p class="card__client' + todoClass(p.cliente) + '">' + esc(p.cliente) + "</p>" +
           (p.descripcion ? '<p class="card__desc' + todoClass(p.descripcion) + '">' + esc(p.descripcion) + "</p>" : "") +
           '<ul class="tags tags--card"><li class="tag tag--ink"><span class="sr-only">Rol: </span>' + esc(p.rol) + '</li>' +
-            '<li class="tag">' + (vertical ? "9:16 vertical" : "16:9 horizontal") + "</li></ul>" +
+            (p.seccion === "web" ? "" : '<li class="tag">' + (vertical ? "9:16 vertical" : "16:9 horizontal") + "</li>") + "</ul>" +
           extLink +
         "</div>" +
       "</article>"
@@ -358,6 +375,9 @@
 
     // Producción
     fillTrack($("#produccionGrid"), visible(D.produccion));
+    var web = visible(D.web);
+    $("#web").hidden = !web.length;
+    fillTrack($("#webGrid"), web);
 
     // Herramientas
     $("#herramientasLista").innerHTML = (D.herramientas || []).map(function (h, i) {
