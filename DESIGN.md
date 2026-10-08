@@ -228,3 +228,9 @@ Todos tienen bordes rectos (`--radius: 4px` como mucho). Las únicas excepciones
 - `index.html`: la estructura y el hero (stickers y cursores).
 - `assets/fotos/arian.jpg` y `assets/fotos/setup.jpg`: polaroids de "Sobre mí". Van cuadradas, mínimo 600×600; si no están, se ve un placeholder.
 - `assets/og-image.jpg`: imagen para compartir, en el mismo estilo.
+
+## Índice
+
+Barra fija debajo de la regla (`.indice`, alto `--idx-h`). Solo aparece mientras se recorre el lado activo.
+Detrás de cámara lista las secciones; delante de cámara, las carpetas numeradas (mismo salto que los marcadores).
+El ítem activo va en negro; al final, un acceso punteado al otro lado y a Contacto.

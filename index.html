@@ -54,6 +54,14 @@
       <div class="ruler__labels" data-ruler></div>
       <span class="ruler__head" id="playhead"></span>
     </div>
+    <!-- Índice del lado activo: aparece al recorrer "detrás" o "delante" de cámara -->
+    <nav class="indice" id="indice" aria-label="Índice de la sección">
+      <div class="indice__inner">
+        <span class="indice__label mono" aria-hidden="true">Índice</span>
+        <div class="indice__list" id="indiceDetras" data-side="detras"></div>
+        <div class="indice__list" id="indiceDelante" data-side="delante" hidden></div>
+      </div>
+    </nav>
   </header>
 
   <main id="contenido">
@@ -128,7 +136,7 @@
           </button>
           <button type="button" class="side-switch__opt" role="tab" id="tab-delante" aria-controls="delante" aria-selected="false" tabindex="-1">
             <span class="side-switch__ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="2" y="7" width="14" height="11" rx="1"/><path d="M16 11l6-3v9l-6-3"/><circle cx="7" cy="12.5" r="2"/></svg></span>
-            <span class="side-switch__txt"><span class="side-switch__label">Delante de cámara</span><span class="mono">Contenido · actuación · arte</span></span>
+            <span class="side-switch__txt"><span class="side-switch__label">Delante de cámara</span><span class="mono">Contenido · actuación · música</span></span>
           </button>
           <span class="side-switch__knob" aria-hidden="true"></span>
         </div>

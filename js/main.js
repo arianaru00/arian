@@ -369,6 +369,7 @@
 
     // Aviso para js/motion.js (animaciones que dependen del contenido)
     window.__portfolioRendered = true;
+    buildIndice();
     document.dispatchEvent(new CustomEvent("portfolio:render"));
 
     // Aviso TODO (solo consola)
@@ -412,7 +413,7 @@
   var stacks = []; // [{ groups: [...], nav: elemento de marcadores }]
 
   function layoutStack() {
-    var base = $("#nav").offsetHeight + 44;
+    var base = $("#nav").offsetHeight + $("#indice").offsetHeight + 44;
     stacks.forEach(function (st) {
       st.groups.forEach(function (g, i) {
         var want = base + i * STACK_STEP, h = g.offsetHeight;
@@ -502,6 +503,7 @@
     }
     if (opts.hash !== false && history.replaceState) history.replaceState(null, "", "#" + side);
     layoutStack();
+    updateIndice();
     dispatchEvent(new Event("resize")); // recalcula flechas de las tiras del panel que apareció
   }
 
@@ -543,6 +545,62 @@
     if (panel) setSide(panel.id, { hash: false, scroll: id === "detras" || id === "delante" });
   }
   addEventListener("hashchange", sideFromHash);
+
+  /* ----------------------------------------------------------- Índice */
+  // Un índice por lado. Detrás: las secciones. Delante: las carpetas (saltan como los marcadores).
+  function buildIndice() {
+    var otro = '<span class="indice__sep" aria-hidden="true"></span>';
+    $("#indiceDetras").innerHTML = [].map.call(document.querySelectorAll("#detras > section[id]"), function (s) {
+      var h = s.querySelector("h2");
+      return '<a class="indice__item" href="#' + s.id + '" data-spy="' + s.id + '">' + esc(h ? h.textContent.trim() : s.id) + "</a>";
+    }).join("") + otro +
+      '<a class="indice__item indice__item--otro" href="#delante">Delante de cámara →</a>' +
+      '<a class="indice__item" href="#contacto">Contacto</a>';
+    $("#indiceDelante").innerHTML = [].map.call(document.querySelectorAll("#delanteGrupos > .group"), function (g, i) {
+      var tab = g.querySelector(".panel__tab");
+      return '<a class="indice__item" href="' + tab.getAttribute("href") + '" data-jump data-i="' + i + '"><span class="indice__n">' + pad(i + 1) +
+        "</span>" + esc(g.querySelector(".panel__tab-name").textContent) + "</a>";
+    }).join("") + otro +
+      '<a class="indice__item indice__item--otro" href="#detras">← Detrás de cámara</a>' +
+      '<a class="indice__item" href="#contacto">Contacto</a>';
+    updateIndice();
+  }
+
+  function updateIndice() {
+    var nav = $("#nav"), side = currentSide(), panel = document.getElementById(side);
+    var top = nav.offsetHeight, r = panel.getBoundingClientRect();
+    var show = r.top <= top + $("#indice").offsetHeight + 24 && r.bottom > top + 160;
+    nav.classList.toggle("has-indice", show);
+    $("#indiceDetras").hidden = side !== "detras";
+    $("#indiceDelante").hidden = side !== "delante";
+    if (!show) return;
+    var list = side === "detras" ? $("#indiceDetras") : $("#indiceDelante");
+    var items = list.querySelectorAll("[data-spy], [data-i]"), active = -1;
+    if (side === "detras") {
+      var line = top + $("#indice").offsetHeight + 80;
+      items.forEach(function (a, i) { var s = document.getElementById(a.dataset.spy); if (s && s.getBoundingClientRect().top <= line) active = i; });
+    } else {
+      var front = $("#delanteGrupos > .group.is-front");
+      active = front ? [].indexOf.call(front.parentElement.querySelectorAll(":scope > .group"), front) : 0;
+    }
+    items.forEach(function (a, i) {
+      if (i === active) {
+        if (a.getAttribute("aria-current") !== "true") {
+          a.setAttribute("aria-current", "true");
+          // que el activo quede a la vista en la tira (sin mover la página)
+          var lr = list.getBoundingClientRect(), ar = a.getBoundingClientRect();
+          if (ar.left < lr.left || ar.right > lr.right) list.scrollLeft += ar.left - lr.left - 16;
+        }
+      } else a.removeAttribute("aria-current");
+    });
+  }
+
+  var idxRaf = 0;
+  addEventListener("scroll", function () {
+    if (idxRaf) return;
+    idxRaf = requestAnimationFrame(function () { idxRaf = 0; updateIndice(); });
+  }, { passive: true });
+  addEventListener("resize", updateIndice);
 
   /* ------------------------------------------------------- Navegación */
   var toggle = $("#navToggle"), menu = $("#navMenu");

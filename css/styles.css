@@ -33,13 +33,14 @@
   --radius-lg: 24px;
   --nav-h: 56px;
   --ruler-h: 22px;
+  --idx-h: 46px;
   --border: 2px solid var(--ink);
   --shadow: 3px 3px 0 var(--ink);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + var(--ruler-h) + 12px); -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + var(--ruler-h) + var(--idx-h) + 12px); -webkit-text-size-adjust: 100%; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -738,3 +739,36 @@ svg { display: block; }
 }
 .sticker--rep:hover { background: var(--yellow); transform: rotate(0deg) translateY(-2px); }
 
+
+/* ----------------------------------------------------------- Índice */
+/* Barra fija debajo de la regla; solo se ve mientras recorrés uno de los dos lados */
+.indice {
+  position: absolute; top: 100%; left: 0; right: 0; height: var(--idx-h);
+  background: var(--paper); border-bottom: 1px solid var(--line);
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+}
+.nav.has-indice .indice { opacity: 1; visibility: visible; transform: none; }
+.menu-open .indice { visibility: hidden; }
+.indice__inner { max-width: 1200px; height: 100%; margin: 0 auto; padding: 0 var(--gutter); display: flex; align-items: center; gap: 10px; }
+.indice__label { flex: none; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
+.indice__list { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 4px 0; }
+.indice__list::-webkit-scrollbar { display: none; }
+.indice__list[hidden] { display: none; }
+.indice__item {
+  flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 10px;
+  font: 600 0.64rem var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; white-space: nowrap;
+  color: var(--ink); background: var(--white); border: 1.5px solid var(--ink); cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.indice__item:hover { background: var(--paper-2); }
+.indice__item[aria-current="true"] { background: var(--ink); color: var(--white); }
+.indice__n { color: var(--ink-2); }
+.indice__item[aria-current="true"] .indice__n { color: var(--yellow); }
+.indice__sep { flex: none; width: 1px; height: 20px; background: var(--line); margin: 0 4px; }
+.indice__item--otro { border-style: dashed; }
+@media (prefers-reduced-motion: reduce) { .indice { transition: none; } }
+@media (max-width: 639px) {
+  .indice__label { display: none; }
+  .indice__list { mask-image: linear-gradient(90deg, #000 85%, transparent); -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); }
+}
