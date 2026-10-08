@@ -772,3 +772,24 @@ svg { display: block; }
   .indice__label { display: none; }
   .indice__list { mask-image: linear-gradient(90deg, #000 85%, transparent); -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); }
 }
+
+/* Diseño web: tarjeta con marco de navegador */
+.browser { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--white); color: var(--ink); text-decoration: none; }
+.browser__bar { flex: none; display: flex; align-items: center; gap: 10px; height: 26px; padding: 0 10px; background: var(--paper-2); border-bottom: 1.5px solid var(--ink); }
+.browser__dots { display: flex; gap: 5px; }
+.browser__dots i { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--white); }
+.browser__dots i:first-child { background: var(--magenta); }
+.browser__dots i:nth-child(2) { background: var(--yellow); }
+.browser__dots i:last-child { background: var(--green); }
+.browser__url { flex: 1; min-width: 0; padding: 2px 8px; background: var(--white); border: 1px solid var(--line); font-size: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.browser__view { position: relative; flex: 1; overflow: hidden; }
+.browser__view img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; z-index: 1; }
+.browser__ph {
+  position: absolute; inset: 0; display: grid; place-content: center; gap: 6px; padding: 16px; text-align: center;
+  background: repeating-linear-gradient(0deg, transparent 0 23px, var(--line) 23px 24px), var(--paper);
+}
+.browser__name { font: 700 clamp(1.2rem, 3vw, 1.8rem)/1.05 var(--f-display); letter-spacing: -0.02em; }
+.browser__ph .mono { font-size: 0.62rem; color: var(--ink-2); }
+.browser:hover .browser__url, .browser:focus-visible .browser__url { background: var(--yellow); }
+.browser:focus-visible { outline-offset: -4px; }
+.footer__line a { color: inherit; }

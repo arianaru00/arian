@@ -276,6 +276,16 @@ window.PORTFOLIO = {
   ],
 
   /* ---------------------------------------------------------- PRODUCCIÓN */
+  // Diseño web con Pantufla Design (marco de navegador; "portada" = captura del sitio)
+  web: [
+    { titulo: "Tierras Argentinas", cliente: "Tierras Argentinas", rol: "Diseño y desarrollo web", tipo: "Sitio web", seccion: "web",
+      formato: "horizontal", plataforma: "link", url: "https://www.tierrasargentinas.org/", metrica: null, descripcion: "" },
+    { titulo: "2-MG", cliente: "2-MG", rol: "Diseño y desarrollo web", tipo: "Sitio web", seccion: "web",
+      formato: "horizontal", plataforma: "link", url: "https://2-mg.vercel.app/", metrica: null, descripcion: "" },
+    { titulo: "Pantufla Design", cliente: "Mi estudio de diseño web", rol: "Diseño y desarrollo web", tipo: "Sitio web", seccion: "web",
+      formato: "horizontal", plataforma: "link", url: "https://pantufla.vercel.app/", metrica: null, descripcion: "" },
+  ],
+
   produccion: [
     {
       titulo: "TODO: título",
